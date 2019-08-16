@@ -1,0 +1,29 @@
+{
+    "private": true,
+    "scripts": {
+        "build": "webpack --mode production",
+        "start": "webpack-dev-server",
+        "compile-demo-raw": "fable-splitter demo -o ./dist",
+        "pretest": "fable-splitter tests -o dist/tests --commonjs",
+        "test": "mocha dist/tests"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Zaid-Ajaj/Elmish.Toastr.git"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.0.0",
+        "fable-compiler": "^2.3.19",
+        "fable-loader": "^2.1.8",
+        "fable-splitter": "^2.1.10",
+        "mocha": "^6.2.0",
+        "remotedev": "^0.2.7",
+        "webpack": "^4.29.6",
+        "webpack-cli": "^3.3.0",
+        "webpack-dev-server": "^3.2.1"
+    },
+    "dependencies": {
+        "react": "^16.8.6",
+        "react-dom": "^16.8.6"
+    }
+}
