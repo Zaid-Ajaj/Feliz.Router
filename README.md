@@ -11,17 +11,17 @@ open Feliz.Router
 type State = { CurrentUrl : string list }
 type Msg = UrlChanged of string list
 
-let init() = { CurrentUrl = [ ] }
+let init() = { CurrentUrl = [ ] }, Cmd.none
 
 let update (UrlChanged segments) state =
-    { state with CurrentUrl = segments }
+    { state with CurrentUrl = segments }, Cmd.none
 
 let render state dispatch =
     let currentPage =
         match state.CurrentUrl with
-        | [ ] -> Html.h1 "Home"
-        | [ "users" ] -> Html.h1 "Users page"
-        | [ "users"; Route.Int userId ] -> Html.h1 (sprintf "User ID %d" userId)
+        | [ ] -> Html.h1 "Home"                                                  // /#
+        | [ "users" ] -> Html.h1 "Users page"                                    // /#/users
+        | [ "users"; Route.Int userId ] -> Html.h1 (sprintf "User ID %d" userId) // /#/users/42
         | _ -> Html.h1 "Not found"
 
     Router.router [
@@ -148,7 +148,7 @@ type State = { CurrentUrl : string list }
 type Msg =
     | UrlChanged of string list
     | NavigateToUsers
-    | NavigateToUser of userId
+    | NavigateToUser of string
 
 let init() = { CurrentUrl = [ ] }, Cmd.none
 
@@ -175,7 +175,7 @@ let render state dispatch =
                     Html.h1 "Users page"
                     Html.button [
                         prop.text "Navigate to User(10)"
-                        prop.onClick (fun _ -> dispatch (NavigateToUser 10))
+                        prop.onClick (fun _ -> dispatch (NavigateToUser "10"))
                     ]
                 ]
             ]
