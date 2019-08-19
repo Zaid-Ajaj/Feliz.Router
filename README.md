@@ -136,7 +136,7 @@ Router.navigate("users", 1, "details") => "#/users/1/details"
 Examples of generated paths with query string parameters
 ```fs
 Router.navigate("users", [ "id", 1 ]) => "#/user?id=1"
-Router.navigate("users", [ "name", "john"; "married", "false" ]) => "#/users?name=john&married=fase"
+Router.navigate("users", [ "name", "john"; "married", "false" ]) => "#/users?name=john&married=false"
 // paramters are encoded automatically
 Router.navigate("search", [ "q", "whats up" ]) => @"#/search?q=whats%20up"
 // Pushing a new history entry is the default bevahiour
