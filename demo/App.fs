@@ -23,7 +23,7 @@ let update msg state =
     match msg with
     | UrlChanged segments -> { state with CurrentUrl = segments }, Cmd.none
     | NavigateUsers -> state, Router.navigate("users")
-    | NavigateToUser userId -> state, Router.navigate("users", [ "id", userId ])
+    | NavigateToUser userId -> state, Router.navigate("users", [ "id", userId ], HistoryMode.ReplaceState)
 
 let render state dispatch =
     let currentPage =

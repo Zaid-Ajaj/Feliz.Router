@@ -5,10 +5,18 @@ open Browser.Dom
 open Fable.React
 open Elmish
 open Fable.Core
-open Fable.Core.JsInterop
 
 type IUrlSearchParamters =
     abstract entries : unit -> seq<string array>
+
+/// Determines whether the router will push a new entry to the history of modify the current one.
+[<RequireQualifiedAccess>]
+type HistoryMode =
+    /// A new history will be added to the entries such that if the user clicks the back button,
+    /// the previous page will be shown, this is the default bahavior of the router.
+    | PushState = 1
+    /// Only modifies the current history entry and does not add a new one to the history stack. Clicking the back button will *not* have the effect of retuning to the previous page.
+    | ReplaceState = 2
 
 [<RequireQualifiedAccess>]
 module internal Router =
@@ -50,9 +58,11 @@ module internal Router =
             | path when path.StartsWith "#" -> "#/" + path.Substring(1, path.Length - 1)
             | path -> sprintf "#/%s" path
 
-    let nav xs : Elmish.Cmd<_> =
+    let nav xs (mode: HistoryMode) : Elmish.Cmd<_> =
         Cmd.ofSub (fun _ ->
-            history.pushState ((), "", encodeParts xs)
+            if mode = HistoryMode.PushState
+            then history.pushState ((), "", encodeParts xs)
+            else history.replaceState((), "", encodeParts xs)
             let ev = document.createEvent("CustomEvent")
             ev.initEvent (customNavigationEvent, true, true)
             window.dispatchEvent ev |> ignore)
@@ -165,75 +175,143 @@ type Router =
         ofType<RouterComponent, _, _>(modifiedProperties) [| |]
 
     static member navigate([<ParamArray>] xs: string array) =
-        Router.nav (List.ofArray xs)
-    static member navigate(segment: string, queryString) =
-        Router.nav [ segment + Router.encodeQueryString queryString ]
-    static member navigate(segment: string, queryString) =
-        Router.nav [ segment + Router.encodeQueryStringInts queryString ]
-    static member navigate(segment1: string, segment2: string, queryString) =
-        Router.nav [ segment1; segment2 + Router.encodeQueryString queryString ]
-    static member navigate(segment1: string, segment2: string, queryString) =
-        Router.nav [ segment1; segment2 + Router.encodeQueryStringInts queryString ]
-    static member navigate(segment1: string, segment2: string, segment3:string, queryString) =
-        Router.nav [ segment1; segment2; segment3 + Router.encodeQueryString queryString ]
-    static member navigate(segment1: string, segment2: string, segment3:string, queryString) =
-        Router.nav [ segment1; segment2; segment3 + Router.encodeQueryStringInts queryString ]
-    static member navigate(segment1: string, segment2: int, segment3:string, queryString) =
-        Router.nav [ segment1; string segment2; segment3 + Router.encodeQueryString queryString ]
-    static member navigate(segment1: string, segment2: int, segment3:string, queryString) =
-        Router.nav [ segment1; string segment2; segment3 + Router.encodeQueryStringInts queryString ]
-    static member navigate(segment1: string, segment2: string, segment3:string, segment4: string, queryString) =
-        Router.nav [ segment1; segment2; segment3; segment4 + Router.encodeQueryString queryString ]
-    static member navigate(segment1: string, segment2: string, segment3:string, segment4: string, queryString) =
-        Router.nav [ segment1; segment2; segment3; segment4 + Router.encodeQueryStringInts queryString ]
-    static member navigate(segment1: string, segment2: string, segment3:string, segment4: string, segment5, queryString) =
-        Router.nav [ segment1; segment2; segment3; segment4; segment5 + Router.encodeQueryString queryString ]
-    static member navigate(segment1: string, segment2: string, segment3:string, segment4: string, segment5, queryString) =
-        Router.nav [ segment1; segment2; segment3; segment4; segment5 + Router.encodeQueryStringInts queryString ]
-    static member navigate(segment1: string, segment2: int, segment3:string, segment4: string, queryString) =
-        Router.nav [ segment1; string segment2; segment3; segment4 + Router.encodeQueryString queryString ]
-    static member navigate(segment1: string, segment2: int, segment3:string, segment4: string, queryString) =
-        Router.nav [ segment1; string segment2; segment3; segment4 + Router.encodeQueryStringInts queryString ]
-    static member navigate(segment1: string, segment2: int, segment3:int, segment4: string, queryString) =
-        Router.nav [ segment1; string segment2; string segment3; segment4 + Router.encodeQueryString queryString ]
-    static member navigate(segment1: string, segment2: int, segment3:int, segment4: string, queryString) =
-        Router.nav [ segment1; string segment2; string segment3; segment4 + Router.encodeQueryStringInts queryString ]
-    static member navigate(segment1: string, segment2: int, segment3:int, segment4: string, segment5: string, segment6, queryString) =
-        Router.nav [ segment1; string segment2; string segment3; segment4; segment5; segment6 + Router.encodeQueryString queryString ]
-    static member navigate(segment1: string, segment2: int, segment3:int, segment4: string, segment5: string, segment6, queryString) =
-        Router.nav [ segment1; string segment2; string segment3; segment4; segment5; segment6 + Router.encodeQueryStringInts queryString ]
-    static member navigate(segment1: string, segment2: int, segment3:int, segment4: int, segment5: string, queryString) =
-        Router.nav [ segment1; string segment2; string segment3; string segment4; segment5 + Router.encodeQueryString queryString ]
-    static member navigate(segment1: string, segment2: int, segment3:int, segment4: int, segment5: string, queryString) =
-        Router.nav [ segment1; string segment2; string segment3; string segment4; segment5 + Router.encodeQueryStringInts queryString ]
-    static member navigate(segment1: string, segment2: int, segment3:string, segment4: int, segment5: string, queryString) =
-        Router.nav [ segment1; string segment2; segment3; string segment4; segment5 + Router.encodeQueryString queryString ]
-    static member navigate(segment1: string, segment2: int, segment3:string, segment4: int, segment5: string, queryString) =
-        Router.nav [ segment1; string segment2; segment3; string segment4; segment5 + Router.encodeQueryStringInts queryString ]
-    static member navigate(segment1: string, segment2: int, segment3:string, segment4: string, segment5, queryString) =
-        Router.nav [ segment1; string segment2; segment3; segment4; segment5 + Router.encodeQueryString queryString ]
-    static member navigate(segment1: string, segment2: int, segment3:string, segment4: string, segment5, queryString) =
-        Router.nav [ segment1; string segment2; segment3; segment4; segment5 + Router.encodeQueryStringInts queryString ]
+        Router.nav (List.ofArray xs) HistoryMode.PushState
+    static member navigate(segment: string, queryString) : Cmd<_> =
+        Router.nav [ segment + Router.encodeQueryString queryString ] HistoryMode.PushState
+    static member navigate(segment: string, queryString, mode) : Cmd<_> =
+        Router.nav [ segment + Router.encodeQueryString queryString ] mode
+    static member navigate(segment: string, queryString) : Cmd<_> =
+        Router.nav [ segment + Router.encodeQueryStringInts queryString ] HistoryMode.PushState
+    static member navigate(segment: string, queryString, mode) : Cmd<_> =
+        Router.nav [ segment + Router.encodeQueryStringInts queryString ] mode
+    static member navigate(segment1: string, segment2: string, queryString) : Cmd<_> =
+        Router.nav [ segment1; segment2 + Router.encodeQueryString queryString ] HistoryMode.PushState
+    static member navigate(segment1: string, segment2: string, queryString, mode) : Cmd<_> =
+        Router.nav [ segment1; segment2 + Router.encodeQueryString queryString ] mode
+    static member navigate(segment1: string, segment2: string, queryString) : Cmd<_> =
+        Router.nav [ segment1; segment2 + Router.encodeQueryStringInts queryString ] HistoryMode.PushState
+    static member navigate(segment1: string, segment2: string, queryString, mode) : Cmd<_> =
+        Router.nav [ segment1; segment2 + Router.encodeQueryStringInts queryString ] mode
+    static member navigate(segment1: string, segment2: string, segment3:string, queryString) : Cmd<_> =
+        Router.nav [ segment1; segment2; segment3 + Router.encodeQueryString queryString ] HistoryMode.PushState
+    static member navigate(segment1: string, segment2: string, segment3:string, queryString, mode) : Cmd<_> =
+        Router.nav [ segment1; segment2; segment3 + Router.encodeQueryString queryString ] mode
+    static member navigate(segment1: string, segment2: string, segment3:string, queryString) : Cmd<_> =
+        Router.nav [ segment1; segment2; segment3 + Router.encodeQueryStringInts queryString ] HistoryMode.PushState
+    static member navigate(segment1: string, segment2: string, segment3:string, queryString, mode) : Cmd<_> =
+        Router.nav [ segment1; segment2; segment3 + Router.encodeQueryStringInts queryString ] mode
+    static member navigate(segment1: string, segment2: int, segment3:string, queryString) : Cmd<_> =
+        Router.nav [ segment1; string segment2; segment3 + Router.encodeQueryString queryString ] HistoryMode.PushState
+    static member navigate(segment1: string, segment2: int, segment3:string, queryString, mode) : Cmd<_> =
+        Router.nav [ segment1; string segment2; segment3 + Router.encodeQueryString queryString ] mode
+    static member navigate(segment1: string, segment2: int, segment3:string, queryString) : Cmd<_> =
+        Router.nav [ segment1; string segment2; segment3 + Router.encodeQueryStringInts queryString ] HistoryMode.PushState
+    static member navigate(segment1: string, segment2: int, segment3:string, queryString, mode) : Cmd<_> =
+        Router.nav [ segment1; string segment2; segment3 + Router.encodeQueryStringInts queryString ] mode
+    static member navigate(segment1: string, segment2: string, segment3:string, segment4: string, queryString) : Cmd<_> =
+        Router.nav [ segment1; segment2; segment3; segment4 + Router.encodeQueryString queryString ] HistoryMode.PushState
+    static member navigate(segment1: string, segment2: string, segment3:string, segment4: string, queryString, mode) : Cmd<_> =
+        Router.nav [ segment1; segment2; segment3; segment4 + Router.encodeQueryString queryString ] mode
+    static member navigate(segment1: string, segment2: string, segment3:string, segment4: string, queryString) : Cmd<_> =
+        Router.nav [ segment1; segment2; segment3; segment4 + Router.encodeQueryStringInts queryString ] HistoryMode.PushState
+    static member navigate(segment1: string, segment2: string, segment3:string, segment4: string, queryString, mode) : Cmd<_> =
+        Router.nav [ segment1; segment2; segment3; segment4 + Router.encodeQueryStringInts queryString ] mode
+    static member navigate(segment1: string, segment2: string, segment3:string, segment4: string, segment5, queryString) : Cmd<_> =
+        Router.nav [ segment1; segment2; segment3; segment4; segment5 + Router.encodeQueryString queryString ] HistoryMode.PushState
+    static member navigate(segment1: string, segment2: string, segment3:string, segment4: string, segment5, queryString, mode) : Cmd<_> =
+        Router.nav [ segment1; segment2; segment3; segment4; segment5 + Router.encodeQueryString queryString ] mode
+    static member navigate(segment1: string, segment2: string, segment3:string, segment4: string, segment5, queryString) : Cmd<_> =
+        Router.nav [ segment1; segment2; segment3; segment4; segment5 + Router.encodeQueryStringInts queryString ] HistoryMode.PushState
+    static member navigate(segment1: string, segment2: string, segment3:string, segment4: string, segment5, queryString, mode) : Cmd<_> =
+        Router.nav [ segment1; segment2; segment3; segment4; segment5 + Router.encodeQueryStringInts queryString ] mode
+    static member navigate(segment1: string, segment2: int, segment3:string, segment4: string, queryString) : Cmd<_> =
+        Router.nav [ segment1; string segment2; segment3; segment4 + Router.encodeQueryString queryString ] HistoryMode.PushState
+    static member navigate(segment1: string, segment2: int, segment3:string, segment4: string, queryString, mode) : Cmd<_> =
+        Router.nav [ segment1; string segment2; segment3; segment4 + Router.encodeQueryString queryString ] mode
+    static member navigate(segment1: string, segment2: int, segment3:string, segment4: string, queryString) : Cmd<_> =
+        Router.nav [ segment1; string segment2; segment3; segment4 + Router.encodeQueryStringInts queryString ] HistoryMode.PushState
+    static member navigate(segment1: string, segment2: int, segment3:string, segment4: string, queryString, mode) : Cmd<_> =
+        Router.nav [ segment1; string segment2; segment3; segment4 + Router.encodeQueryStringInts queryString ] mode
+    static member navigate(segment1: string, segment2: int, segment3:int, segment4: string, queryString) : Cmd<_> =
+        Router.nav [ segment1; string segment2; string segment3; segment4 + Router.encodeQueryString queryString ] HistoryMode.PushState
+    static member navigate(segment1: string, segment2: int, segment3:int, segment4: string, queryString, mode) : Cmd<_> =
+        Router.nav [ segment1; string segment2; string segment3; segment4 + Router.encodeQueryString queryString ] mode
+    static member navigate(segment1: string, segment2: int, segment3:int, segment4: string, queryString) : Cmd<_> =
+        Router.nav [ segment1; string segment2; string segment3; segment4 + Router.encodeQueryStringInts queryString ] HistoryMode.PushState
+    static member navigate(segment1: string, segment2: int, segment3:int, segment4: string, queryString, mode) : Cmd<_> =
+        Router.nav [ segment1; string segment2; string segment3; segment4 + Router.encodeQueryStringInts queryString ] mode
+    static member navigate(segment1: string, segment2: int, segment3:int, segment4: string, segment5: string, segment6, queryString) : Cmd<_> =
+        Router.nav [ segment1; string segment2; string segment3; segment4; segment5; segment6 + Router.encodeQueryString queryString ] HistoryMode.PushState
+    static member navigate(segment1: string, segment2: int, segment3:int, segment4: string, segment5: string, segment6, queryString, mode) : Cmd<_> =
+        Router.nav [ segment1; string segment2; string segment3; segment4; segment5; segment6 + Router.encodeQueryString queryString ] mode
+    static member navigate(segment1: string, segment2: int, segment3:int, segment4: string, segment5: string, segment6, queryString) : Cmd<_> =
+        Router.nav [ segment1; string segment2; string segment3; segment4; segment5; segment6 + Router.encodeQueryStringInts queryString ] HistoryMode.PushState
+    static member navigate(segment1: string, segment2: int, segment3:int, segment4: string, segment5: string, segment6, queryString, mode) : Cmd<_> =
+        Router.nav [ segment1; string segment2; string segment3; segment4; segment5; segment6 + Router.encodeQueryStringInts queryString ] mode
+    static member navigate(segment1: string, segment2: int, segment3:int, segment4: int, segment5: string, queryString) : Cmd<_> =
+        Router.nav [ segment1; string segment2; string segment3; string segment4; segment5 + Router.encodeQueryString queryString ] HistoryMode.PushState
+    static member navigate(segment1: string, segment2: int, segment3:int, segment4: int, segment5: string, queryString, mode) : Cmd<_> =
+        Router.nav [ segment1; string segment2; string segment3; string segment4; segment5 + Router.encodeQueryString queryString ] mode
+    static member navigate(segment1: string, segment2: int, segment3:int, segment4: int, segment5: string, queryString) : Cmd<_> =
+        Router.nav [ segment1; string segment2; string segment3; string segment4; segment5 + Router.encodeQueryStringInts queryString ] HistoryMode.PushState
+    static member navigate(segment1: string, segment2: int, segment3:int, segment4: int, segment5: string, queryString, mode) : Cmd<_> =
+        Router.nav [ segment1; string segment2; string segment3; string segment4; segment5 + Router.encodeQueryStringInts queryString ] mode
+    static member navigate(segment1: string, segment2: int, segment3:string, segment4: int, segment5: string, queryString) : Cmd<_> =
+        Router.nav [ segment1; string segment2; segment3; string segment4; segment5 + Router.encodeQueryString queryString ] HistoryMode.PushState
+    static member navigate(segment1: string, segment2: int, segment3:string, segment4: int, segment5: string, queryString, mode) : Cmd<_> =
+        Router.nav [ segment1; string segment2; segment3; string segment4; segment5 + Router.encodeQueryString queryString ] mode
+    static member navigate(segment1: string, segment2: int, segment3:string, segment4: int, segment5: string, queryString) : Cmd<_> =
+        Router.nav [ segment1; string segment2; segment3; string segment4; segment5 + Router.encodeQueryStringInts queryString ] HistoryMode.PushState
+    static member navigate(segment1: string, segment2: int, segment3:string, segment4: int, segment5: string, queryString, mode) : Cmd<_> =
+        Router.nav [ segment1; string segment2; segment3; string segment4; segment5 + Router.encodeQueryStringInts queryString ] mode
+    static member navigate(segment1: string, segment2: int, segment3:string, segment4: string, segment5, queryString) : Cmd<_> =
+        Router.nav [ segment1; string segment2; segment3; segment4; segment5 + Router.encodeQueryString queryString ] HistoryMode.PushState
+    static member navigate(segment1: string, segment2: int, segment3:string, segment4: string, segment5, queryString, mode) : Cmd<_> =
+        Router.nav [ segment1; string segment2; segment3; segment4; segment5 + Router.encodeQueryString queryString ] mode
+    static member navigate(segment1: string, segment2: int, segment3:string, segment4: string, segment5, queryString) : Cmd<_> =
+        Router.nav [ segment1; string segment2; segment3; segment4; segment5 + Router.encodeQueryStringInts queryString ] HistoryMode.PushState
+    static member navigate(segment1: string, segment2: int, segment3:string, segment4: string, segment5, queryString, mode) : Cmd<_> =
+        Router.nav [ segment1; string segment2; segment3; segment4; segment5 + Router.encodeQueryStringInts queryString ] mode
     static member navigate(fullPath: string) : Cmd<_> =
-        Router.nav [ fullPath ]
+        Router.nav [ fullPath ] HistoryMode.PushState
+    static member navigate(fullPath: string, mode) : Cmd<_> =
+        Router.nav [ fullPath ] mode
     static member navigate(segment: string, value: int) : Cmd<_> =
-        Router.nav [segment; string value ]
+        Router.nav [segment; string value ] HistoryMode.PushState
+    static member navigate(segment: string, value: int, mode) : Cmd<_> =
+        Router.nav [segment; string value ] mode
     static member navigate(segment1: string, value1: int, value2: int) : Cmd<_> =
-        Router.nav [segment1; string value1; string value2 ]
+        Router.nav [segment1; string value1; string value2 ] HistoryMode.PushState
+    static member navigate(segment1: string, value1: int, value2: int, mode) : Cmd<_> =
+        Router.nav [segment1; string value1; string value2 ] mode
     static member navigate(segment1: string, value1: int, segment2: string) : Cmd<_> =
-        Router.nav [segment1; string value1; segment2 ]
+        Router.nav [segment1; string value1; segment2 ] HistoryMode.PushState
+    static member navigate(segment1: string, value1: int, segment2: string, mode) : Cmd<_> =
+        Router.nav [segment1; string value1; segment2 ] mode
     static member navigate(segment1: string, value1: int, segment2: string, value2: int) : Cmd<_> =
-        Router.nav [segment1; string value1; segment2; string value2 ]
+        Router.nav [segment1; string value1; segment2; string value2 ] HistoryMode.PushState
+    static member navigate(segment1: string, value1: int, segment2: string, value2: int, mode) : Cmd<_> =
+        Router.nav [segment1; string value1; segment2; string value2 ] mode
     static member navigate(segment1: string, value1: int, segment2: string, value2: int, segment3: string) : Cmd<_> =
-        Router.nav [segment1; string value1; segment2; string value2; segment3 ]
+        Router.nav [segment1; string value1; segment2; string value2; segment3 ] HistoryMode.PushState
+    static member navigate(segment1: string, value1: int, segment2: string, value2: int, segment3: string, mode) : Cmd<_> =
+        Router.nav [segment1; string value1; segment2; string value2; segment3 ] mode
     static member navigate(segment1: string, value1: int, segment2: string, value2: int, segment3: string, segment4: string) : Cmd<_> =
-        Router.nav [segment1; string value1; segment2; string value2; segment3; segment4 ]
+        Router.nav [segment1; string value1; segment2; string value2; segment3; segment4 ] HistoryMode.PushState
+    static member navigate(segment1: string, value1: int, segment2: string, value2: int, segment3: string, segment4: string, mode) : Cmd<_> =
+        Router.nav [segment1; string value1; segment2; string value2; segment3; segment4 ] mode
     static member navigate(segment1: string, value1: int, segment2: string, value2: int, segment3: string, value3: int) : Cmd<_> =
-        Router.nav [segment1; string value1; segment2; string value2; segment3; string value3 ]
+        Router.nav [segment1; string value1; segment2; string value2; segment3; string value3 ] HistoryMode.PushState
+    static member navigate(segment1: string, value1: int, segment2: string, value2: int, segment3: string, value3: int, mode) : Cmd<_> =
+        Router.nav [segment1; string value1; segment2; string value2; segment3; string value3 ] mode
     static member navigate(segment1: string, value1: int, value2: int, value3: int) : Cmd<_> =
-        Router.nav [segment1; string value1; string value2; string value3 ]
+        Router.nav [segment1; string value1; string value2; string value3 ] HistoryMode.PushState
+    static member navigate(segment1: string, value1: int, value2: int, value3: int, mode) : Cmd<_> =
+        Router.nav [segment1; string value1; string value2; string value3 ] mode
     static member navigate(segment1: string, value1: int, value2: int, segment2: string) : Cmd<_> =
-        Router.nav [segment1; string value1; string value2; segment2 ]
+        Router.nav [segment1; string value1; string value2; segment2 ] HistoryMode.PushState
+    static member navigate(segment1: string, value1: int, value2: int, segment2: string, mode) : Cmd<_> =
+        Router.nav [segment1; string value1; string value2; segment2 ] mode
 
 module Route =
     let (|Int|_|) (input: string) =

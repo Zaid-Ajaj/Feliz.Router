@@ -124,7 +124,7 @@ Aside from listening to manual changes made to the URL by hand, the `Router.rout
 
 The function `Router.navigate` has the general syntax:
 ```
-Router.navigate(segment1, segment2, ..., segmentN, [query string parameters])
+Router.navigate(segment1, segment2, ..., segmentN, [query string parameters], [historyMode])
 ```
 Examples of the generated paths:
 ```fs
@@ -139,6 +139,10 @@ Router.navigate("users", [ "id", 1 ]) => "#/user?id=1"
 Router.navigate("users", [ "name", "john"; "married", "false" ]) => "#/users?name=john&married=fase"
 // paramters are encoded automatically
 Router.navigate("search", [ "q", "whats up" ]) => @"#/search?q=whats%20up"
+// Pushing a new history entry is the default bevahiour
+Router.navigate("users", HistoryMode.PushState)
+// to replace current history entry, use HistoryMode.ReplaceState
+Router.navigate("users", HistoryMode.ReplaceState)
 ```
 
 Here is a full example in an Elmish program.
