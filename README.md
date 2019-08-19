@@ -29,7 +29,7 @@ let render state dispatch =
         Router.application currentPage
     ]
 
-Program.mkProgram init update render
+Program.mkSimple init update render
 |> Program.withReactSynchronous "root"
 |> Program.run
 ```
@@ -145,10 +145,11 @@ Here is a full example in an Elmish program.
 
 ```fs
 type State = { CurrentUrl : string list }
+
 type Msg =
     | UrlChanged of string list
     | NavigateToUsers
-    | NavigateToUser of userId
+    | NavigateToUser of int
 
 let init() = { CurrentUrl = [ ] }, Cmd.none
 
