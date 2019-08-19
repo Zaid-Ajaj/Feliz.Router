@@ -74,6 +74,8 @@ Target.create "RestoreFableTestProject" <| fun _ ->
 Target.create "RunLiveTests" <| fun _ ->
     run npmTool "start" "."
 
+Target.create "Test" <| fun _ -> run npmTool "test" "."
+
 let publish projectPath =
     [ projectPath </> "bin"
       projectPath </> "obj" ] |> Shell.cleanDirs
@@ -102,12 +104,15 @@ open Fake.Core.TargetOperators
 
 "Clean"
   ==> "InstallNpmPackages"
-  ==> "RestoreFableTestProject"
   ==> "RunLiveTests"
 
 "Clean"
   ==> "InstallNpmPackages"
-  ==> "RestoreFableTestProject"
+  ==> "Test"
+
+
+"Clean"
+  ==> "InstallNpmPackages"
   ==> "CompileFableTestProject"
   ==> "Build"
 
