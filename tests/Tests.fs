@@ -38,7 +38,7 @@ let routerTests =
                 "#/home/users/settings", [ "home"; "users"; "settings" ]
                 "#/home/users/1", [ "home"; "users"; "1" ]
                 "#/users?id=1", [ "users"; "?id=1" ]
-                @"#/search?q=whats%20up", [ "search"; "?q=whats up" ]
+                @"#/search?q=whats%20up", [ "search"; @"?q=whats%20up" ]
                 "#/?token=jwt", [ "?token=jwt" ]
                 "#?token=jwt", [ "?token=jwt" ]
                 "#?pretty", [ "?pretty" ]

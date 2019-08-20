@@ -84,11 +84,10 @@ module internal Router =
             then [ segment ]
             else
             match segment.Split [| '?' |] with
-            | [| value |] -> [value]
-            | [| value; "" |] -> [value]
-            | [| value; query |] -> [ value; "?" + query ]
+            | [| value |] -> [decodeURIComponent value]
+            | [| value; "" |] -> [decodeURIComponent value]
+            | [| value; query |] -> [ decodeURIComponent value; "?" + query ]
             | _ -> [])
-        |> List.map decodeURIComponent
 
     [<Emit("new URLSearchParams($0)")>]
     let createUrlSearchParams (queryString: string) : IUrlSearchParamters = jsNative
