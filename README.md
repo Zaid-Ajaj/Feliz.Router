@@ -70,7 +70,7 @@ segment "#/users?id=1" => [ "users"; "?id=1" ]
 segment "#/home/users?id=1" => [ "home"; "users"; "?id=1" ]
 segment "#/users?id=1&format=json" => [ "users"; "?id=1&format=json" ]
 // escaped query string parameters are decoded when the url is segmented
-segment @"#/search?q=whats%20up" => [ "search"; "?q=whats up" ]
+segment @"#/search?q=whats%20up" => [ "search"; "?q=whats%20up" ]
 ```
 
 ### Parsing URL segments into `Page` defintions
@@ -111,7 +111,7 @@ let render state dispatch =
         | User userId -> Html.h1 (sprintf "User ID %d" userId)
         | NotFound -> Html.h1 "Not Found"
 
-    Router.rotuer [
+    Router.router [
         Router.onUrlChanged (parseUrl >> PageChanged >> dispatch)
         Router.application currentPage
     ]
