@@ -73,7 +73,7 @@ segment "#/users?id=1&format=json" => [ "users"; "?id=1&format=json" ]
 segment @"#/search?q=whats%20up" => [ "search"; "?q=whats%20up" ]
 ```
 
-### Parsing URL segments into `Page` defintions
+### Parsing URL segments into `Page` definitions
 
 Instead of using overly complicated parser combinators to parse a simple structure such as URL segments, the `Route` module includes a handful of convenient active patterns to use against these segments:
 ```fs
