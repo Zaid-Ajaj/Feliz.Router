@@ -191,6 +191,14 @@ type Router =
         Router.nav [ segment1; segment2 + Router.encodeQueryStringInts queryString ] HistoryMode.PushState
     static member navigate(segment1: string, segment2: string, queryString, mode) : Cmd<_> =
         Router.nav [ segment1; segment2 + Router.encodeQueryStringInts queryString ] mode
+    static member navigate(segment1: string, segment2: string, segment3:int, queryString) : Cmd<_> =
+        Router.nav [ segment1; segment2; string segment3 + Router.encodeQueryString queryString ] HistoryMode.PushState
+    static member navigate(segment1: string, segment2: string, segment3:int, queryString, mode) : Cmd<_> =
+        Router.nav [ segment1; segment2;string  segment3 + Router.encodeQueryString queryString ] mode
+    static member navigate(segment1: string, segment2: string, segment3:int, queryString) : Cmd<_> =
+        Router.nav [ segment1; segment2; string segment3 + Router.encodeQueryStringInts queryString ] HistoryMode.PushState
+    static member navigate(segment1: string, segment2: string, segment3:int, queryString, mode) : Cmd<_> =
+        Router.nav [ segment1; segment2; string segment3 + Router.encodeQueryStringInts queryString ] mode
     static member navigate(segment1: string, segment2: string, segment3:string, queryString) : Cmd<_> =
         Router.nav [ segment1; segment2; segment3 + Router.encodeQueryString queryString ] HistoryMode.PushState
     static member navigate(segment1: string, segment2: string, segment3:string, queryString, mode) : Cmd<_> =
@@ -283,6 +291,10 @@ type Router =
         Router.nav [segment1; string value1; string value2 ] HistoryMode.PushState
     static member navigate(segment1: string, value1: int, value2: int, mode) : Cmd<_> =
         Router.nav [segment1; string value1; string value2 ] mode
+    static member navigate(segment1: string, segment2: string, value1: int) : Cmd<_> =
+        Router.nav [segment1; segment2; string value1 ] HistoryMode.PushState
+    static member navigate(segment1: string, segment2: string, value1: int, mode) : Cmd<_> =
+        Router.nav [segment1; segment2; string value1 ] mode
     static member navigate(segment1: string, value1: int, segment2: string) : Cmd<_> =
         Router.nav [segment1; string value1; segment2 ] HistoryMode.PushState
     static member navigate(segment1: string, value1: int, segment2: string, mode) : Cmd<_> =
