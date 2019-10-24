@@ -57,8 +57,16 @@ let render state dispatch =
             Html.h1 "Not Found"
 
     Router.router [
+        Router.hashMode
         Router.onUrlChanged (UrlChanged >> dispatch)
-        Router.application currentPage
+        Router.application [
+            Html.div [
+                prop.style [ style.padding 20 ]
+                prop.children [
+                    currentPage
+                ]
+            ]
+        ]
     ]
 
 Program.mkProgram init update render
