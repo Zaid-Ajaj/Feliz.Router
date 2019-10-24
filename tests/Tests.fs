@@ -154,7 +154,7 @@ let routerTests =
             ]
             |> List.iter (fun (input, output) -> Expect.equal (Router.encodeParts input) output "They are equal")
 
-            Router.routeType <- RouteType.Path
+            Router.routeMode <- RouteMode.Path
             [
                 [ "users" ], "/users"
                 [ "/home" ], "/home"
