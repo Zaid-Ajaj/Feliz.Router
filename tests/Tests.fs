@@ -152,8 +152,9 @@ let routerTests =
                 [ "products" + Router.encodeQueryStringInts [ "id", 1 ] ], "#/products?id=1"
                 [ "users" + Router.encodeQueryString [ ] ], "#/users"
             ]
-            |> List.iter (fun (input, output) -> Expect.equal (Router.encodeParts input RouteType.Hash) output "They are equal")
+            |> List.iter (fun (input, output) -> Expect.equal (Router.encodeParts input) output "They are equal")
 
+            Router.routeType <- RouteType.Path
             [
                 [ "users" ], "/users"
                 [ "/home" ], "/home"
@@ -168,7 +169,7 @@ let routerTests =
                 [ "products" + Router.encodeQueryStringInts [ "id", 1 ] ], "/products?id=1"
                 [ "users" + Router.encodeQueryString [ ] ], "/users"
             ]
-            |> List.iter (fun (input, output) -> Expect.equal (Router.encodeParts input RouteType.Path) output "They are equal")
+            |> List.iter (fun (input, output) -> Expect.equal (Router.encodeParts input) output "They are equal")
     ]
 
 [<EntryPoint>]
