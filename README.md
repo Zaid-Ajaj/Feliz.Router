@@ -54,7 +54,23 @@ let render state dispatch =
 Where it has two primary properties
  - `Router.onUrlChanged : string list -> unit` gets triggered when the url changes where it gives you the *url segments* to work with.
  - `Router.application: ReactElement` the element to be rendered as the single child of the `router` component, usually here is where your root application `render` function goes.
+ - `Router.application: ReactElement list` overload to be rendered as the children of the `router`
 
+```fs
+let render state dispatch =
+
+    let currentPage = Html.h1 "App"
+
+    Router.router [
+        Router.onUrlChanged (UrlChanged >> dispatch)
+        Router.application [
+            Html.div [
+                Html.h1 "Using the router"
+                currentPage
+            ]
+        ]
+    ]
+```
 ### `Router.onUrlChanged` is everything
 
 Routing in most applications revolves around having your application react to url changes, causing the current page to change and data to reload. Here is where `Router.onUrlChanged` comes into play where it triggers when the url changes giving you the *cleaned url segments* as a list of strings. These are sample urls their corresposing url segments that get triggered as input of of `onUrlChanged`:
@@ -117,6 +133,17 @@ let render state dispatch =
     ]
 ```
 Of course, you can define your own patterns to match against the route segments, just remember that you are working against simple string.
+
+### Using Path routes without hash sign
+The router by default prepends all generated routes with a hash sign (`#`), to omit the hash sign and use plain old paths, just use `Router.pathMode`
+```fs
+Router.router [
+    Router.onUrlChanged (parseUrl >> PageChanged >> dispatch)
+    Router.pathMode
+    Router.application currentPage
+]
+```
+
 
 ### Programmatic Navigation
 

@@ -17,8 +17,8 @@ NUGET
       Fable.Browser.Event (>= 1.0) - restriction: >= netstandard2.0
       Fable.Core (>= 3.0) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
-    Fable.Core (3.0)
-      FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
+    Fable.Core (3.1.2)
+      FSharp.Core (>= 4.7) - restriction: >= netstandard2.0
     Fable.Elmish (3.0.5) - restriction: >= netstandard2.0
       Fable.Core (>= 3.0) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.6.2) - restriction: >= netstandard2.0
@@ -33,18 +33,18 @@ NUGET
     Fable.Parsimmon (4.0) - restriction: >= netstandard2.0
       Fable.Core (>= 3.0) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.6.2) - restriction: >= netstandard2.0
-    Fable.React (5.2.7) - restriction: >= netstandard2.0
+    Fable.React (5.3.4) - restriction: >= netstandard2.0
       Fable.Browser.Dom (>= 1.0) - restriction: >= netstandard2.0
       Fable.Core (>= 3.0) - restriction: >= netstandard2.0
-      FSharp.Core (>= 4.6.2) - restriction: >= netstandard2.0
+      FSharp.Core (>= 4.7) - restriction: >= netstandard2.0
     Fable.SimpleJson (3.3)
       Fable.Core (>= 3.0) - restriction: >= netstandard2.0
       Fable.Parsimmon (>= 4.0) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.6.2) - restriction: >= netstandard2.0
-    Feliz (0.46)
-      Fable.Core (>= 3.0) - restriction: >= netstandard2.0
-      Fable.React (>= 5.2.7) - restriction: >= netstandard2.0
-      FSharp.Core (>= 4.6.2) - restriction: >= netstandard2.0
+    Feliz (0.63)
+      Fable.Core (>= 3.1.1) - restriction: >= netstandard2.0
+      Fable.React (>= 5.3.2) - restriction: >= netstandard2.0
+      FSharp.Core (>= 4.7) - restriction: >= netstandard2.0
     FSharp.Core (4.7)
 
 GROUP Build
