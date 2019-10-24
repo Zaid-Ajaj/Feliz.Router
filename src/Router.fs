@@ -212,7 +212,7 @@ type Router =
                 match key with
                 | "onUrlChanged" -> { state with urlChanged  = unbox value  }
                 | "application"  -> { state with application = unbox value  }
-                | "routeType"    -> { state with routeMode   = unbox value  }
+                | "routeMode"    -> { state with routeMode   = unbox value  }
                 | _ -> state)
 
         ofType<RouterComponent, _, _>(modifiedProperties) [| |]
