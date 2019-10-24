@@ -42,13 +42,32 @@ let routerTests =
                 "#/?token=jwt", [ "?token=jwt" ]
                 "#?token=jwt", [ "?token=jwt" ]
                 "#?pretty", [ "?pretty" ]
+                "" , [ ]
+                "/", [ ]
+                "/?", [ ]
+                "?", [ ]
+                "home", [ "home" ]
+                "home/", [ "home" ]
+                "/home", [ "home" ]
+                "/home/", [ "home" ]
+                "/home/users", [ "home"; "users" ]
+                "/home/users/", [ "home"; "users" ]
+                "/home/users/settings", [ "home"; "users"; "settings" ]
+                "/home/users/1", [ "home"; "users"; "1" ]
+                "/users?id=1", [ "users"; "?id=1" ]
+                @"/search?q=whats%20up", [ "search"; @"?q=whats%20up" ]
+                "/?token=jwt", [ "?token=jwt" ]
+                "?token=jwt", [ "?token=jwt" ]
+                "?pretty", [ "?pretty" ]
             ]
             |> List.iter (fun (input, output) -> Expect.equal output (Router.urlSegments input)  "Should be equal")
 
         testCase "Router.urlSegments decodes URL segments" <| fun _ ->
-            let input = "#/Hello%20World"
+            let hashInput = "#/Hello%20World"
+            let pathInput = "/Hello%20World"
             let expected  = [ "Hello World" ]
-            Expect.equal expected (Router.urlSegments input)  "They are equal"
+            Expect.equal expected (Router.urlSegments hashInput)  "They are equal"
+            Expect.equal expected (Router.urlSegments pathInput)  "They are equal"
 
         testCase "Route.Query works" <| fun _ ->
             match [ "users"; "?id=1" ] with
@@ -133,7 +152,23 @@ let routerTests =
                 [ "products" + Router.encodeQueryStringInts [ "id", 1 ] ], "#/products?id=1"
                 [ "users" + Router.encodeQueryString [ ] ], "#/users"
             ]
-            |> List.iter (fun (input, output) -> Expect.equal (Router.encodeParts input) output "They are equal")
+            |> List.iter (fun (input, output) -> Expect.equal (Router.encodeParts input RouteType.Hash) output "They are equal")
+
+            [
+                [ "users" ], "/users"
+                [ "/home" ], "/home"
+                [ "/hello?value=1" ], "/hello?value=1"
+                [ "/hello/home" ], "/hello/home"
+                [ "about" ], "/about"
+                [ "users"; "home" ], "/users/home"
+                [ "/one"; "two" ], "/one/two"
+                [ "users"; "1" ], "/users/1"
+                [ "users" + Router.encodeQueryString [ "id", "1" ] ], "/users?id=1"
+                [ "search" + Router.encodeQueryString [ "q", "whats up" ] ], @"/search?q=whats%20up"
+                [ "products" + Router.encodeQueryStringInts [ "id", 1 ] ], "/products?id=1"
+                [ "users" + Router.encodeQueryString [ ] ], "/users"
+            ]
+            |> List.iter (fun (input, output) -> Expect.equal (Router.encodeParts input RouteType.Path) output "They are equal")
     ]
 
 [<EntryPoint>]
