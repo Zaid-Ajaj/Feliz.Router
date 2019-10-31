@@ -13,7 +13,7 @@
     },
     "devDependencies": {
         "@babel/core": "^7.0.0",
-        "fable-compiler": "^2.3.19",
+        "fable-compiler": "^2.4.9",
         "fable-loader": "^2.1.8",
         "fable-splitter": "^2.1.10",
         "mocha": "^6.2.0",
