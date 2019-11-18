@@ -62,6 +62,31 @@ let routerTests =
             ]
             |> List.iter (fun (input, output) -> Expect.equal output (Router.urlSegments input)  "Should be equal")
 
+        testCase "RouteMode affects how the URL segments are cleaned up" <| fun _ ->
+            ("/some/path#", RouteMode.Hash)
+            ||> Router.urlSegmentsWithRouteMode
+            |> fun output -> Expect.equal output [ ] "Hash at the end means route starts there"
+
+            ("/Feliz.MaterialUI/#", RouteMode.Hash)
+            ||> Router.urlSegmentsWithRouteMode
+            |> fun output -> Expect.equal output [ ] "Hash at the end means route starts there"
+
+            ("/Feliz.MaterialUI#", RouteMode.Hash)
+            ||> Router.urlSegmentsWithRouteMode
+            |> fun output -> Expect.equal output [ ] "Hash at the end means route starts there"
+
+            ("/some/path#/", RouteMode.Hash)
+            ||> Router.urlSegmentsWithRouteMode
+            |> fun output -> Expect.equal output [ ] "Hash at the end means route starts there"
+
+            ("/some/path#", RouteMode.Path)
+            ||> Router.urlSegmentsWithRouteMode
+            |> fun output -> Expect.equal output ["some";"path"] "Path segments are read correctly"
+
+            ("/Feliz.MaterialUI#", RouteMode.Path)
+            ||> Router.urlSegmentsWithRouteMode
+            |> fun output -> Expect.equal output [ "Feliz.MaterialUI" ] "Path segments are read correctly"
+
         testCase "Router.urlSegments decodes URL segments" <| fun _ ->
             let hashInput = "#/Hello%20World"
             let pathInput = "/Hello%20World"

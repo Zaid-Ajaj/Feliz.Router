@@ -85,15 +85,18 @@ module internal Router =
         )
 
     /// Parses the URL into multiple path segments
-    let urlSegments (path: string) =
+    let urlSegmentsWithRouteMode (path: string) (mode: RouteMode) =
         if path.StartsWith "#"
         // remove the hash sign
         then path.Substring(1, path.Length - 1)
+        elif mode = RouteMode.Hash && (path.EndsWith "#" || path.EndsWith "#/")
+        then ""
         // return as is
         else path
         |> fun p -> p.Split '/' // split the url segments
         |> List.ofArray
         |> List.filter (String.IsNullOrWhiteSpace >> not)
+        |> List.map (fun segment -> segment.TrimEnd '#')
         |> List.collect (fun segment ->
             if segment = "?"
             then [ ]
@@ -105,6 +108,9 @@ module internal Router =
             | [| value; "" |] -> [decodeURIComponent value]
             | [| value; query |] -> [ decodeURIComponent value; "?" + query ]
             | _ -> [])
+
+    /// Parses the URL into multiple path segments
+    let urlSegments (path: string) = urlSegmentsWithRouteMode path routeMode
 
     [<Emit("new URLSearchParams($0)")>]
     let createUrlSearchParams (queryString: string) : IUrlSearchParamters = jsNative
