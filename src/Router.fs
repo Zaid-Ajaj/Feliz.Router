@@ -374,6 +374,83 @@ type Router =
     static member navigate(segment1: string, value1: int, value2: int, segment2: string, mode) : Cmd<_> =
         Router.nav [segment1; string value1; string value2; segment2 ] mode
 
+    static member format([<ParamArray>] xs: string array) =
+        Router.encodeParts (List.ofArray xs)
+    static member format(segment: string, queryString) : string =
+        Router.encodeParts [ segment + Router.encodeQueryString queryString ]
+    static member format(segment: string, queryString) : string =
+        Router.encodeParts [ segment + Router.encodeQueryStringInts queryString ]
+    static member format(segment1: string, segment2: string, queryString) : string =
+        Router.encodeParts [ segment1; segment2 + Router.encodeQueryString queryString ]
+    static member format(segment1: string, segment2: string, queryString) : string =
+        Router.encodeParts [ segment1; segment2 + Router.encodeQueryStringInts queryString ]
+    static member format(segment1: string, segment2: string, segment3:int, queryString) : string =
+        Router.encodeParts [ segment1; segment2; string segment3 + Router.encodeQueryString queryString ]
+    static member format(segment1: string, segment2: string, segment3:int, queryString) : string =
+        Router.encodeParts [ segment1; segment2; string segment3 + Router.encodeQueryStringInts queryString ]
+    static member format(segment1: string, segment2: string, segment3:string, queryString) : string =
+        Router.encodeParts [ segment1; segment2; segment3 + Router.encodeQueryString queryString ]
+    static member format(segment1: string, segment2: string, segment3:string, queryString) : string =
+        Router.encodeParts [ segment1; segment2; segment3 + Router.encodeQueryStringInts queryString ]
+    static member format(segment1: string, segment2: int, segment3:string, queryString) : string =
+        Router.encodeParts [ segment1; string segment2; segment3 + Router.encodeQueryString queryString ]
+    static member format(segment1: string, segment2: int, segment3:string, queryString) : string =
+        Router.encodeParts [ segment1; string segment2; segment3 + Router.encodeQueryStringInts queryString ]
+    static member format(segment1: string, segment2: string, segment3:string, segment4: string, queryString) : string =
+        Router.encodeParts [ segment1; segment2; segment3; segment4 + Router.encodeQueryString queryString ]
+    static member format(segment1: string, segment2: string, segment3:string, segment4: string, queryString) : string =
+        Router.encodeParts [ segment1; segment2; segment3; segment4 + Router.encodeQueryStringInts queryString ]
+    static member format(segment1: string, segment2: string, segment3:string, segment4: string, segment5, queryString) : string =
+        Router.encodeParts [ segment1; segment2; segment3; segment4; segment5 + Router.encodeQueryString queryString ]
+    static member format(segment1: string, segment2: string, segment3:string, segment4: string, segment5, queryString) : string =
+        Router.encodeParts [ segment1; segment2; segment3; segment4; segment5 + Router.encodeQueryStringInts queryString ]
+    static member format(segment1: string, segment2: int, segment3:string, segment4: string, queryString) : string =
+        Router.encodeParts [ segment1; string segment2; segment3; segment4 + Router.encodeQueryString queryString ]
+    static member format(segment1: string, segment2: int, segment3:string, segment4: string, queryString) : string =
+        Router.encodeParts [ segment1; string segment2; segment3; segment4 + Router.encodeQueryStringInts queryString ]
+    static member format(segment1: string, segment2: int, segment3:int, segment4: string, queryString) : string =
+        Router.encodeParts [ segment1; string segment2; string segment3; segment4 + Router.encodeQueryString queryString ]
+    static member format(segment1: string, segment2: int, segment3:int, segment4: string, queryString) : string =
+        Router.encodeParts [ segment1; string segment2; string segment3; segment4 + Router.encodeQueryStringInts queryString ]
+    static member format(segment1: string, segment2: int, segment3:int, segment4: string, segment5: string, segment6, queryString) : string =
+        Router.encodeParts [ segment1; string segment2; string segment3; segment4; segment5; segment6 + Router.encodeQueryString queryString ]
+    static member format(segment1: string, segment2: int, segment3:int, segment4: string, segment5: string, segment6, queryString) : string =
+        Router.encodeParts [ segment1; string segment2; string segment3; segment4; segment5; segment6 + Router.encodeQueryStringInts queryString ]
+    static member format(segment1: string, segment2: int, segment3:int, segment4: int, segment5: string, queryString) : string =
+        Router.encodeParts [ segment1; string segment2; string segment3; string segment4; segment5 + Router.encodeQueryString queryString ]
+    static member format(segment1: string, segment2: int, segment3:int, segment4: int, segment5: string, queryString) : string =
+        Router.encodeParts [ segment1; string segment2; string segment3; string segment4; segment5 + Router.encodeQueryStringInts queryString ]
+    static member format(segment1: string, segment2: int, segment3:string, segment4: int, segment5: string, queryString) : string =
+        Router.encodeParts [ segment1; string segment2; segment3; string segment4; segment5 + Router.encodeQueryString queryString ]
+    static member format(segment1: string, segment2: int, segment3:string, segment4: int, segment5: string, queryString) : string =
+        Router.encodeParts [ segment1; string segment2; segment3; string segment4; segment5 + Router.encodeQueryStringInts queryString ]
+    static member format(segment1: string, segment2: int, segment3:string, segment4: string, segment5, queryString) : string =
+        Router.encodeParts [ segment1; string segment2; segment3; segment4; segment5 + Router.encodeQueryString queryString ]
+    static member format(segment1: string, segment2: int, segment3:string, segment4: string, segment5, queryString) : string =
+        Router.encodeParts [ segment1; string segment2; segment3; segment4; segment5 + Router.encodeQueryStringInts queryString ]
+    static member format(fullPath: string) : string =
+        Router.encodeParts [ fullPath ]
+    static member format(segment: string, value: int) : string =
+        Router.encodeParts [segment; string value ]
+    static member format(segment1: string, value1: int, value2: int) : string =
+        Router.encodeParts [segment1; string value1; string value2 ]
+    static member format(segment1: string, segment2: string, value1: int) : string =
+        Router.encodeParts [segment1; segment2; string value1 ]
+    static member format(segment1: string, value1: int, segment2: string) : string =
+        Router.encodeParts [segment1; string value1; segment2 ]
+    static member format(segment1: string, value1: int, segment2: string, value2: int) : string =
+        Router.encodeParts [segment1; string value1; segment2; string value2 ]
+    static member format(segment1: string, value1: int, segment2: string, value2: int, segment3: string) : string =
+        Router.encodeParts [segment1; string value1; segment2; string value2; segment3 ]
+    static member format(segment1: string, value1: int, segment2: string, value2: int, segment3: string, segment4: string) : string =
+        Router.encodeParts [segment1; string value1; segment2; string value2; segment3; segment4 ]
+    static member format(segment1: string, value1: int, segment2: string, value2: int, segment3: string, value3: int) : string =
+        Router.encodeParts [segment1; string value1; segment2; string value2; segment3; string value3 ]
+    static member format(segment1: string, value1: int, value2: int, value3: int) : string =
+        Router.encodeParts [segment1; string value1; string value2; string value3 ]
+    static member format(segment1: string, value1: int, value2: int, segment2: string) : string =
+        Router.encodeParts [segment1; string value1; string value2; segment2 ]
+
 module Route =
     let (|Int|_|) (input: string) =
         match Int32.TryParse input with
