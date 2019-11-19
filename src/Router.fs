@@ -134,7 +134,7 @@ type RouterComponent(props: RouterProperties)  =
     override this.componentDidMount() =
         let onChange (ev: _) =
             match window.location.hash with
-            | "" -> window.location.pathname + window.location.search
+            | "" when Router.routeMode = RouteMode.Path -> window.location.pathname + window.location.search
             | _ -> window.location.hash
             |> Router.urlSegments
             |> this.props.urlChanged
