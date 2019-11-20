@@ -172,6 +172,39 @@ Router.navigate("users", HistoryMode.PushState)
 Router.navigate("users", HistoryMode.ReplaceState)
 ```
 
+### Generating links
+
+In addition to `Router.navigate(...)` you can also use the `Router.format(...)` if you only need to generate the string that can be used to set the `href` property of a link.
+
+The function `Router.format` has a similar general syntax as `Router.navigate`:
+```
+Router.format(segment1, segment2, ..., segmentN, [query string parameters])
+```
+Examples of the generated paths:
+```fs
+Router.format("users") => "#/users"
+Router.format("users", "about") => "#/users/about"
+Router.format("users", 1) => "#/users/1"
+Router.format("users", 1, "details") => "#/users/1/details"
+```
+Examples of generated paths with query string parameters
+```fs
+Router.format("users", [ "id", 1 ]) => "#/user?id=1"
+Router.format("users", [ "name", "john"; "married", "false" ]) => "#/users?name=john&married=false"
+// paramters are encoded automatically
+Router.format("search", [ "q", "whats up" ]) => @"#/search?q=whats%20up"
+```
+
+Example of usage:
+```fs
+Html.a [
+    prop.href (Router.format("users", ["id", 10]))
+    prop.text "Single User link"
+]
+```
+
+### Demo application
+
 Here is a full example in an Elmish program.
 
 ```fs
@@ -197,9 +230,16 @@ let render state dispatch =
     let currentPage =
         match state.CurrentUrl with
         | [ ] ->
-            Html.button [
-                prop.text "Navigate to users"
-                prop.onClick (fun _ -> dispatch NavigateToUsers)
+            Html.div [
+                Html.h1 "Home"
+                Html.button [
+                    prop.text "Navigate to users"
+                    prop.onClick (fun _ -> dispatch NavigateToUsers)
+                ]
+                Html.a [
+                    prop.href (Router.format("users"))
+                    prop.text "Users link"
+                ]
             ]
         | [ "users" ] ->
             Html.div [
@@ -207,6 +247,10 @@ let render state dispatch =
                 Html.button [
                     prop.text "Navigate to User(10)"
                     prop.onClick (fun _ -> dispatch (NavigateToUser 10))
+                ]
+                Html.a [
+                    prop.href (Router.format("users", ["id", 10]))
+                    prop.text "Single User link"
                 ]
             ]
 

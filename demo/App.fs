@@ -29,17 +29,26 @@ let render state dispatch =
     let currentPage =
         match state.CurrentUrl with
         | [ ] ->
-            Html.button [
-                prop.text "Users"
-                prop.onClick (fun _ -> dispatch NavigateUsers)
+            Html.div [
+                Html.button [
+                    prop.text "Users"
+                    prop.onClick (fun _ -> dispatch NavigateUsers)
+                ]
+                Html.a [
+                    prop.href (Router.format("users"))
+                    prop.text "Users link"
+                ]
             ]
-
         | [ "users" ] ->
             Html.div [
                 prop.children [
                     Html.button [
                         prop.text "Single User"
                         prop.onClick (fun _ -> dispatch (NavigateToUser 10))
+                    ]
+                    Html.a [
+                        prop.href (Router.format("users", ["id", 10]))
+                        prop.text "Single User link"
                     ]
                 ]
             ]
