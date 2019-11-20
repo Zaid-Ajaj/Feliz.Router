@@ -195,10 +195,6 @@ let routerTests =
                 [ "users" + Router.encodeQueryString [ ] ], "/users"
             ]
             |> List.iter (fun (input, output) -> Expect.equal (Router.encodeParts input) output "They are equal")
-
-        testCase "format works" <| fun _ ->
-            Router.routeMode <- RouteMode.Hash
-            Expect.equal (Router.format ["home"]) "#/home" "They are equal"
     ]
 
 [<EntryPoint>]
