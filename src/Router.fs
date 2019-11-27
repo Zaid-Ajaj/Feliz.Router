@@ -194,7 +194,7 @@ type Router =
     /// The content that is rendered inside where the `router` is placed. Usually this contains the root application but it could also be part of another root element.
     ///
     /// It will keep listening for URL changes as long as the `router` is rendered on screen somewhere.
-    static member application (app: ReactElement list) : IRouterProperty = unbox ("application", Feliz.Html.fragment app)
+    static member application (app: ReactElement list) : IRouterProperty = unbox ("application", Fable.React.Helpers.fragment [ ] app)
 
     /// Use # based routes (default)
     static member hashMode : IRouterProperty = unbox ("routeMode", RouteMode.Hash)
