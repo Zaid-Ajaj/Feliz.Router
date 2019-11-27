@@ -143,8 +143,6 @@ type RouterComponent(props: RouterProperties)  =
         Router.routeMode <- props.routeMode
         // listen to path changes
         window.addEventListener("popstate", unbox onChange)
-        // listen to manual hash changes or page refresh
-        window.addEventListener("hashchange", unbox onChange)
         // listen to custom navigation events published by `Router.navigate()`
         window.addEventListener(Router.customNavigationEvent, unbox onChange)
         // trigger event here

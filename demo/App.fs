@@ -11,6 +11,7 @@ type Msg =
     | UrlChanged of string list
     | NavigateUsers
     | NavigateToUser of int
+    | NavigateToUserReplaceState of int
 
 let init() = { CurrentUrl = [ ] }, Cmd.none
 
@@ -23,7 +24,9 @@ let update msg state =
     match msg with
     | UrlChanged segments -> { state with CurrentUrl = segments }, Cmd.none
     | NavigateUsers -> state, Router.navigate("users")
-    | NavigateToUser userId -> state, Router.navigate("users", [ "id", userId ], HistoryMode.ReplaceState)
+    | NavigateToUser userId -> state, Router.navigate("users", [ "id", userId ])
+    | NavigateToUserReplaceState userId -> state, Router.navigate("users", [ "id", userId ], HistoryMode.ReplaceState)
+
 
 let render state dispatch =
     let currentPage =
@@ -43,9 +46,15 @@ let render state dispatch =
             Html.div [
                 prop.children [
                     Html.button [
-                        prop.text "Single User"
+                        prop.text "Single User (History.PushState)"
                         prop.onClick (fun _ -> dispatch (NavigateToUser 10))
                     ]
+
+                    Html.button [
+                        prop.text "Single User (History.ReplaceState)"
+                        prop.onClick (fun _ -> dispatch (NavigateToUserReplaceState 10))
+                    ]
+
                     Html.a [
                         prop.href (Router.format("users", ["id", 10]))
                         prop.text "Single User link"
