@@ -85,8 +85,6 @@ segment "#/users/1/details" => [ "users"; "1"; "details" ]
 segment "#/users?id=1" => [ "users"; "?id=1" ]
 segment "#/home/users?id=1" => [ "home"; "users"; "?id=1" ]
 segment "#/users?id=1&format=json" => [ "users"; "?id=1&format=json" ]
-// escaped query string parameters are decoded when the url is segmented
-segment @"#/search?q=whats%20up" => [ "search"; "?q=whats%20up" ]
 ```
 
 ### Parsing URL segments into `Page` definitions

@@ -145,8 +145,6 @@ type RouterComponent(props: RouterProperties)  =
         window.addEventListener("popstate", unbox onChange)
         // listen to custom navigation events published by `Router.navigate()`
         window.addEventListener(Router.customNavigationEvent, unbox onChange)
-        // trigger event here
-        onChange()
 
     override this.componentWillUnmount() =
         // clean up when the router isn't in view anymore
@@ -178,10 +176,6 @@ type Router =
     /// `segment "#/home/users?id=1" => [ "home"; "users"; "?id=1" ]`
     ///
     /// `segment "#/users?id=1&format=json" => [ "users"; "?id=1&format=json" ]`
-    ///
-    /// escaped query string parameters are decoded when the url is segmented
-    ///
-    /// `segment @"#/search?q=whats%20up" => [ "search"; "?q=whats up" ]`
     static member onUrlChanged (eventHandler: string list -> unit) : IRouterProperty = unbox ("onUrlChanged", eventHandler)
 
     /// The element that is rendered inside where the `router` is placed. Usually this contains the root application but it could also be part of another root element.
