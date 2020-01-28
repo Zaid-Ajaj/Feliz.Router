@@ -9,6 +9,11 @@ group Main
     nuget Fable.Core
     nuget Fable.Elmish.React
 
+group Analyzers
+source https://www.nuget.org/api/v2
+
+nuget FSharp.Analyzers.Sample
+
 group Build
     source https://api.nuget.org/v3/index.json
     framework: netstandard2.0

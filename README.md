@@ -11,7 +11,7 @@ open Feliz.Router
 type State = { CurrentUrl : string list }
 type Msg = UrlChanged of string list
 
-let init() = { CurrentUrl = [ ] }
+let init() = { CurrentUrl = Router.currentUrl() }
 
 let update (UrlChanged segments) state =
     { state with CurrentUrl = segments }
@@ -215,7 +215,7 @@ type Msg =
     | NavigateToUsers
     | NavigateToUser of int
 
-let init() = { CurrentUrl = [ ] }, Cmd.none
+let init() = { CurrentUrl = Router.currentUrl() }, Cmd.none
 
 let update msg state =
     match msg with
@@ -257,7 +257,8 @@ let render state dispatch =
         | [ "users"; Route.Query [ "id", Route.Int userId ] ] ->
             Html.h1 (sprintf "Showing user %d" userId)
 
-        | _ -> Html.h1 "Not found"
+        | _ ->
+            Html.h1 "Not found"
 
     Router.router [
         Router.onUrlChanged (UrlChanged >> dispatch)

@@ -202,6 +202,13 @@ type Router =
     /// To keep the request local, you have to use the 'Router.navigate' function for all the URL transitions.
     static member pathMode : IRouterProperty = unbox ("routeMode", RouteMode.Path)
 
+    /// Parses the current URL of the page and returns the cleaned URL segments.
+    static member currentUrl() =
+        match window.location.hash with
+        | "" when Router.routeMode = RouteMode.Path -> window.location.pathname + window.location.search
+        | _ -> window.location.hash
+        |> Router.urlSegments
+
     /// Initializes the router as an element of the page to starts listening to URL changes.
     static member router (properties: IRouterProperty list) : ReactElement =
         let defaultProperties : RouterProperties =

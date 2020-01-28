@@ -54,7 +54,9 @@ let cleanCacheDirs() =
     [ testsPath </> "bin"
       testsPath </> "obj"
       libPath </> "bin"
-      libPath </> "obj" ]
+      libPath </> "obj"
+      "demo" </> "bin"
+      "demo" </> "obj" ]
     |> Shell.cleanDirs
 
 Target.create "Clean" <| fun _ ->
