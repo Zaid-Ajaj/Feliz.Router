@@ -115,6 +115,9 @@ module internal Router =
     [<Emit("new URLSearchParams($0)")>]
     let createUrlSearchParams (queryString: string) : IUrlSearchParamters = jsNative
 
+    [<Emit("window.navigator.userAgent")>]
+    let navigatorUserAgent : string = jsNative
+
 type RouterProperties = {
     urlChanged: string list -> unit
     application: ReactElement
@@ -141,8 +144,15 @@ type RouterComponent(props: RouterProperties)  =
 
         // register global route mode
         Router.routeMode <- props.routeMode
+
         // listen to path changes
-        window.addEventListener("popstate", unbox onChange)
+        if Router.navigatorUserAgent.Contains "Trident" ||
+           Router.navigatorUserAgent.Contains "MSIE" then
+            window.addEventListener("hashchange", unbox onChange)
+        else
+            window.addEventListener("popstate", unbox onChange)
+
+
         // listen to custom navigation events published by `Router.navigate()`
         window.addEventListener(Router.customNavigationEvent, unbox onChange)
 
