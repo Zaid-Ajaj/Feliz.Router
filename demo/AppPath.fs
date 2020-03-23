@@ -1,4 +1,4 @@
-module App
+﻿module AppPath
 
 open Elmish
 open Elmish.React
@@ -13,20 +13,20 @@ type Msg =
     | NavigateToUser of int
     | NavigateToUserReplaceState of int
 
-let init() = { CurrentUrl = Router.currentUrl() }, Cmd.none
+let init() = { CurrentUrl = Router.currentPath() }, Cmd.none
 
 let commands() = [
-    Router.navigate("one", "two", "three")
-    Router.navigate("user", 15)
-    Router.navigate("one", "two", [ "limit", "10"; "id", "20" ])
+    Router.navigatePath("one", "two", "three")
+    Router.navigatePath("user", 15)
+    Router.navigatePath("one", "two", [ "limit", "10"; "id", "20" ])
 ]
 
 let update msg state =
     match msg with
     | UrlChanged segments -> { state with CurrentUrl = segments }, Cmd.none
-    | NavigateUsers -> state, Router.navigate("users")
-    | NavigateToUser userId -> state, Router.navigate("users", [ "id", userId ])
-    | NavigateToUserReplaceState userId -> state, Router.navigate("users", [ "id", userId ], HistoryMode.ReplaceState)
+    | NavigateUsers -> state, Router.navigatePath("users")
+    | NavigateToUser userId -> state, Router.navigatePath("users", [ "id", userId ])
+    | NavigateToUserReplaceState userId -> state, Router.navigatePath("users", [ "id", userId ], HistoryMode.ReplaceState)
 
 let render state dispatch =
     let currentPage =
@@ -38,7 +38,7 @@ let render state dispatch =
                     prop.onClick (fun _ -> dispatch NavigateUsers)
                 ]
                 Html.a [
-                    prop.href (Router.format("users"))
+                    prop.href (Router.formatPath("users"))
                     prop.text "Users link"
                 ]
             ]
@@ -61,12 +61,12 @@ let render state dispatch =
                 ]
 
                 Html.button [
-                    prop.text "Log Router.format(\"users\")"
-                    prop.onClick(fun _ -> Browser.Dom.console.log(Router.format("users")))
+                    prop.text "Log Router.formatPath(\"users\")"
+                    prop.onClick(fun _ -> Browser.Dom.console.log(Router.formatPath("users")))
                 ]
 
                 Html.a [
-                    prop.href (Router.format("users", ["id", 10]))
+                    prop.href (Router.formatPath("users", ["id", 10]))
                     prop.text "Single User link"
                 ]
             ]
@@ -109,7 +109,7 @@ let render state dispatch =
             Html.h1 "Not Found"
 
     Router.router [
-        Router.hashMode
+        Router.pathMode
         Router.onUrlChanged (UrlChanged >> dispatch)
         Router.application [
             Html.div [

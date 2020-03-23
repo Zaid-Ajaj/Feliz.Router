@@ -6,10 +6,10 @@
         <PackageIconUrl></PackageIconUrl>
         <PackageTags>fsharp;fable;react;html;router;routing</PackageTags>
         <Authors>Zaid Ajaj</Authors>
-        <Version>1.9.0</Version>
+        <Version>2.0.0</Version>
         <TargetFramework>netstandard2.0</TargetFramework>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <PackageReleaseNotes>IE support</PackageReleaseNotes>
+        <PackageReleaseNotes>Fix path support and add specialized path-based functions.</PackageReleaseNotes>
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="Router.fs" />

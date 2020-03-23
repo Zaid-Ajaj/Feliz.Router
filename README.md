@@ -132,17 +132,6 @@ let render state dispatch =
 ```
 Of course, you can define your own patterns to match against the route segments, just remember that you are working against simple string.
 
-### Using Path routes without hash sign
-The router by default prepends all generated routes with a hash sign (`#`), to omit the hash sign and use plain old paths, just use `Router.pathMode`
-```fs
-Router.router [
-    Router.onUrlChanged (parseUrl >> PageChanged >> dispatch)
-    Router.pathMode
-    Router.application currentPage
-]
-```
-
-
 ### Programmatic Navigation
 
 Aside from listening to manual changes made to the URL by hand, the `Router.router` element is able to listen to changes made programmatically from your code with `Router.navigate(...)`. This function is implemented as a *command* and can be used inside your `update` function.
@@ -199,6 +188,46 @@ Html.a [
     prop.href (Router.format("users", ["id", 10]))
     prop.text "Single User link"
 ]
+```
+
+### Using Path routes without hash sign
+The router by default prepends all generated routes with a hash sign (`#`), to omit the hash sign and use plain old paths,  use `Router.pathMode`
+```fs
+Router.router [
+    Router.pathMode
+    Router.onUrlChanged (parseUrl >> PageChanged >> dispatch)
+    Router.application currentPage
+]
+```
+Then refactor the application to use path-based functions rather than the default functions which are hash-based:
+| Hash-based | Path-based |
+|---|---|
+| `Router.currentUrl()` | `Router.currentPath()`|
+| `Router.format()` | `Router.formatPath()` |
+| `Router.navigate()` | `Router.navigatePath()`|
+
+Using (anchor) `Html.a` tags using path mode can be problematic because they a full-refresh if they are not prefixed with the hash sign. Still, you can use them with path mode routing by overriding the default behavior using the `prop.onClick` event handler to dispatch a message which executes a `Router.navigatePath` command. It goes like this:
+```fs
+type Msg =
+ | NavigateTo of string
+
+let update msg state =
+  match msg with
+  | NavigateTo href -> state, Router.navigatePath(href)
+
+let goToUrl (dispatch: Msg -> unit) (href: string) (e: MouseEvent) =
+    // disable full page refresh
+    e.preventDefault()
+    // dispatch msg
+    dispatch (NavigateTo href)
+
+let render state dispatch =
+  let href = Router.format("some-sub-path")
+  Html.a [
+    prop.text "Click me"
+    prop.href href
+    prop.onClick (goToUrl dispatch href)
+  ]
 ```
 
 ### Demo application

@@ -42,7 +42,6 @@ let routerTests =
                 "#/?token=jwt", [ "?token=jwt" ]
                 "#?token=jwt", [ "?token=jwt" ]
                 "#?pretty", [ "?pretty" ]
-                "" , [ ]
                 "/", [ ]
                 "/?", [ ]
                 "?", [ ]
@@ -60,39 +59,39 @@ let routerTests =
                 "?token=jwt", [ "?token=jwt" ]
                 "?pretty", [ "?pretty" ]
             ]
-            |> List.iter (fun (input, output) -> Expect.equal output (Router.urlSegments input)  "Should be equal")
+            |> List.iter (fun (input, output) -> Expect.equal output (Router.urlSegments input RouteMode.Hash)  "Should be equal")
 
         testCase "RouteMode affects how the URL segments are cleaned up" <| fun _ ->
             ("/some/path#", RouteMode.Hash)
-            ||> Router.urlSegmentsWithRouteMode
+            ||> Router.urlSegments
             |> fun output -> Expect.equal output [ ] "Hash at the end means route starts there"
 
             ("/Feliz.MaterialUI/#", RouteMode.Hash)
-            ||> Router.urlSegmentsWithRouteMode
+            ||> Router.urlSegments
             |> fun output -> Expect.equal output [ ] "Hash at the end means route starts there"
 
             ("/Feliz.MaterialUI#", RouteMode.Hash)
-            ||> Router.urlSegmentsWithRouteMode
+            ||> Router.urlSegments
             |> fun output -> Expect.equal output [ ] "Hash at the end means route starts there"
 
             ("/some/path#/", RouteMode.Hash)
-            ||> Router.urlSegmentsWithRouteMode
+            ||> Router.urlSegments
             |> fun output -> Expect.equal output [ ] "Hash at the end means route starts there"
 
             ("/some/path#", RouteMode.Path)
-            ||> Router.urlSegmentsWithRouteMode
+            ||> Router.urlSegments
             |> fun output -> Expect.equal output ["some";"path"] "Path segments are read correctly"
 
             ("/Feliz.MaterialUI#", RouteMode.Path)
-            ||> Router.urlSegmentsWithRouteMode
+            ||> Router.urlSegments
             |> fun output -> Expect.equal output [ "Feliz.MaterialUI" ] "Path segments are read correctly"
 
         testCase "Router.urlSegments decodes URL segments" <| fun _ ->
             let hashInput = "#/Hello%20World"
             let pathInput = "/Hello%20World"
             let expected  = [ "Hello World" ]
-            Expect.equal expected (Router.urlSegments hashInput)  "They are equal"
-            Expect.equal expected (Router.urlSegments pathInput)  "They are equal"
+            Expect.equal expected (Router.urlSegments hashInput RouteMode.Hash)  "They are equal"
+            Expect.equal expected (Router.urlSegments pathInput RouteMode.Path)  "They are equal"
 
         testCase "Route.Query works" <| fun _ ->
             match [ "users"; "?id=1" ] with
@@ -177,9 +176,8 @@ let routerTests =
                 [ "products" + Router.encodeQueryStringInts [ "id", 1 ] ], "#/products?id=1"
                 [ "users" + Router.encodeQueryString [ ] ], "#/users"
             ]
-            |> List.iter (fun (input, output) -> Expect.equal (Router.encodeParts input) output "They are equal")
+            |> List.iter (fun (input, output) -> Expect.equal (Router.encodeParts input RouteMode.Hash) output "They are equal")
 
-            Router.routeMode <- RouteMode.Path
             [
                 [ "users" ], "/users"
                 [ "/home" ], "/home"
@@ -194,7 +192,7 @@ let routerTests =
                 [ "products" + Router.encodeQueryStringInts [ "id", 1 ] ], "/products?id=1"
                 [ "users" + Router.encodeQueryString [ ] ], "/users"
             ]
-            |> List.iter (fun (input, output) -> Expect.equal (Router.encodeParts input) output "They are equal")
+            |> List.iter (fun (input, output) -> Expect.equal (Router.encodeParts input RouteMode.Path) output "They are equal")
     ]
 
 [<EntryPoint>]
