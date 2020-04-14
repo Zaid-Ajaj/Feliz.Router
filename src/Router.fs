@@ -127,8 +127,8 @@ type RouterComponent(props: RouterProperties)  =
 
     override this.componentDidMount() =
         let onChange (ev: _) =
-            match window.location.hash with
-            | "" when props.routeMode = RouteMode.Path -> window.location.pathname + window.location.search
+            match props.routeMode with
+            | RouteMode.Path -> window.location.pathname + window.location.search
             | _ -> window.location.hash
             |> fun path -> Router.urlSegments path props.routeMode
             |> this.props.urlChanged
