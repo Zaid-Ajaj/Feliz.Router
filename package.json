@@ -13,14 +13,14 @@
     },
     "devDependencies": {
         "@babel/core": "^7.0.0",
-        "fable-compiler": "^2.4.9",
+        "fable-compiler": "^2.9.0",
         "fable-loader": "^2.1.8",
         "fable-splitter": "^2.1.10",
         "mocha": "^6.2.0",
         "remotedev": "^0.2.7",
         "webpack": "^4.29.6",
         "webpack-cli": "^3.3.0",
-        "webpack-dev-server": "^3.2.1"
+        "webpack-dev-server": "^3.11.0"
     },
     "dependencies": {
         "react": "^16.8.6",

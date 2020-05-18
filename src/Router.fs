@@ -680,6 +680,11 @@ type Router =
         Router.encodeParts [segment1; string value1; string value2; string value3 ] RouteMode.Path
     static member formatPath(segment1: string, value1: int, value2: int, segment2: string) : string =
         Router.encodeParts [segment1; string value1; string value2; segment2 ] RouteMode.Path
+    
+    /// Executes a programmatic navigation command. Useful when using Feliz.Router in standalone React applications.
+    static member execute(cmd: Cmd<_>) = 
+        let dispatch msg = ignore()
+        cmd |> List.iter (fun f -> f dispatch)
 
 module Route =
     let (|Int|_|) (input: string) =

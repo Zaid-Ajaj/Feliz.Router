@@ -14,6 +14,8 @@ type test =
     static member failwith x = failwith x
     static member passWith x = Expect.isTrue true
 
+let itCompiles() = Router.execute(Router.navigate "users")
+
 let routerTests =
     testList "Router tests" [
         testCase "Route.Int works" <| fun _ ->

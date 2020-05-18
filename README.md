@@ -159,6 +159,15 @@ Router.navigate("users", HistoryMode.PushState)
 Router.navigate("users", HistoryMode.ReplaceState)
 ```
 
+### Programmatic navigation in standalone React apps
+The functions `Router.navigate` and `Router.navigatePath` return Elmish commands to be used in Elmish applications. However, if you want to use `Feliz.Router` in a standalone React application, you can simply execute the command yourself using `Router.execute` to perform the navigation:
+```fs
+Html.button [
+    prop.text "Navigate away"
+    prop.onClick (fun _ -> Router.execute(Router.navigate "users"))
+]
+```
+
 ### Generating links
 
 In addition to `Router.navigate(...)` you can also use the `Router.format(...)` if you only need to generate the string that can be used to set the `href` property of a link.
@@ -200,11 +209,11 @@ Router.router [
 ]
 ```
 Then refactor the application to use path-based functions rather than the default functions which are hash-based:
-| Hash-based | Path-based |
-|---|---|
-| `Router.currentUrl()` | `Router.currentPath()`|
-| `Router.format()` | `Router.formatPath()` |
-| `Router.navigate()` | `Router.navigatePath()`|
+| Hash-based            | Path-based              |
+| --------------------- | ----------------------- |
+| `Router.currentUrl()` | `Router.currentPath()`  |
+| `Router.format()`     | `Router.formatPath()`   |
+| `Router.navigate()`   | `Router.navigatePath()` |
 
 Using (anchor) `Html.a` tags using path mode can be problematic because they a full-refresh if they are not prefixed with the hash sign. Still, you can use them with path mode routing by overriding the default behavior using the `prop.onClick` event handler to dispatch a message which executes a `Router.navigatePath` command. It goes like this:
 ```fs
