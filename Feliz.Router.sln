@@ -11,7 +11,16 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "App", "demo\App.fsproj", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B2564BA7-9EDB-46ED-A8F8-1A56867A8C2A}"
 	ProjectSection(SolutionItems) = preProject
+		.travis.yml = .travis.yml
+		appveyor.yml = appveyor.yml
+		build.fsx = build.fsx
+		Nuget.Config = Nuget.Config
+		package.json = package.json
+		paket-install.sh = paket-install.sh
+		paket.dependencies = paket.dependencies
+		publish.js = publish.js
 		README.md = README.md
+		webpack.config.js = webpack.config.js
 	EndProjectSection
 EndProject
 Global
