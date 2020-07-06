@@ -163,7 +163,7 @@ module ReactExtension =
 
     type React with
         /// Initializes the router as an element of the page and starts listening to URL changes.
-        static member router (props: IRouterProperty list) =
+        static member inline router (props: IRouterProperty list) =
             Router.router (unbox<Router.RouterProps> (createObj !!props))
 
 type router =
