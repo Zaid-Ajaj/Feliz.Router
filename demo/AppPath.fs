@@ -1,7 +1,6 @@
 ﻿module AppPath
 
 open Elmish
-open Elmish.React
 open Feliz
 open Feliz.Router
 

@@ -2,6 +2,7 @@ group Main
     source https://api.nuget.org/v3/index.json
     storage:none
 
+    nuget Elmish
     nuget Fable.Mocha
     nuget Fable.SimpleJson
     nuget Feliz
