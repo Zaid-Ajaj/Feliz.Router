@@ -24,9 +24,9 @@ let commands() = [
 let update msg state =
     match msg with
     | UrlChanged segments -> { state with CurrentUrl = segments }, Cmd.none
-    | NavigateUsers -> state, Router.navigate("users")
-    | NavigateToUser userId -> state, Router.navigate("users", [ "id", userId ])
-    | NavigateToUserReplaceState userId -> state, Router.navigate("users", [ "id", userId ], HistoryMode.ReplaceState)
+    | NavigateUsers -> state, Cmd.navigate("users")
+    | NavigateToUser userId -> state, Cmd.navigate("users", [ "id", userId ])
+    | NavigateToUserReplaceState userId -> state, Cmd.navigate("users", [ "id", userId ], HistoryMode.ReplaceState)
 
 let render state dispatch =
     let currentPage =
@@ -108,10 +108,11 @@ let render state dispatch =
         | _ ->
             Html.h1 "Not Found"
 
-    Router.router [
-        Router.hashMode
-        Router.onUrlChanged (UrlChanged >> dispatch)
-        Router.application [
+    React.router [
+        router.hashMode
+        router.onUrlChanged (UrlChanged >> dispatch)
+        
+        router.children [
             Html.div [
                 prop.style [ style.padding 20 ]
                 prop.children [

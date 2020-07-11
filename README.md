@@ -17,16 +17,16 @@ let update (UrlChanged segments) state =
     { state with CurrentUrl = segments }
 
 let render state dispatch =
-    let currentPage =
-        match state.CurrentUrl with
-        | [ ] -> Html.h1 "Home"
-        | [ "users" ] -> Html.h1 "Users page"
-        | [ "users"; Route.Int userId ] -> Html.h1 (sprintf "User ID %d" userId)
-        | _ -> Html.h1 "Not found"
-
-    Router.router [
-        Router.onUrlChanged (UrlChanged >> dispatch)
-        Router.application currentPage
+    React.router [
+        router.onUrlChanged (UrlChanged >> dispatch)
+        
+        router.children [
+            match state.CurrentUrl with
+            | [ ] -> Html.h1 "Home"
+            | [ "users" ] -> Html.h1 "Users page"
+            | [ "users"; Route.Int userId ] -> Html.h1 (sprintf "User ID %d" userId)
+            | _ -> Html.h1 "Not found"
+        ]
     ]
 
 Program.mkSimple init update render
@@ -43,27 +43,26 @@ dotnet add package Feliz.Router
 The package includes a single element called `router` that is to be included at the very top level of your `render` or `view` function
 ```fs
 let render state dispatch =
-
-    let currentPage = Html.h1 "App"
-
-    Router.router [
-        Router.onUrlChanged (UrlChanged >> dispatch)
-        Router.application currentPage
+    React.router [
+        router.onUrlChanged (UrlChanged >> dispatch)
+        router.children [
+            Html.h1 "App"
+        ]
     ]
 ```
 Where it has two primary properties
- - `Router.onUrlChanged : string list -> unit` gets triggered when the url changes where it gives you the *url segments* to work with.
- - `Router.application: ReactElement` the element to be rendered as the single child of the `router` component, usually here is where your root application `render` function goes.
- - `Router.application: ReactElement list` overload to be rendered as the children of the `router`
+ - `router.onUrlChanged : string list -> unit` gets triggered when the url changes where it gives you the *url segments* to work with.
+ - `router.children: ReactElement` the element to be rendered as the single child of the `router` component, usually here is where your root application `render` function goes.
+ - `router.children: ReactElement list` overload to be rendered as the children of the `router`
 
 ```fs
 let render state dispatch =
 
     let currentPage = Html.h1 "App"
 
-    Router.router [
-        Router.onUrlChanged (UrlChanged >> dispatch)
-        Router.application [
+    React.router [
+        router.onUrlChanged (UrlChanged >> dispatch)
+        router.children [
             Html.div [
                 Html.h1 "Using the router"
                 currentPage
@@ -71,9 +70,9 @@ let render state dispatch =
         ]
     ]
 ```
-### `Router.onUrlChanged` is everything
+### `router.onUrlChanged` is everything
 
-Routing in most applications revolves around having your application react to url changes, causing the current page to change and data to reload. Here is where `Router.onUrlChanged` comes into play where it triggers when the url changes giving you the *cleaned url segments* as a list of strings. These are sample urls their corresposing url segments that get triggered as input of of `onUrlChanged`:
+Routing in most applications revolves around having your application react to url changes, causing the current page to change and data to reload. Here is where `router.onUrlChanged` comes into play where it triggers when the url changes giving you the *cleaned url segments* as a list of strings. These are sample urls their corresposing url segments that get triggered as input of of `onUrlChanged`:
 ```fs
 segment "#/" => [ ]
 segment "#/home" => [ "home" ]
@@ -125,18 +124,19 @@ let render state dispatch =
         | User userId -> Html.h1 (sprintf "User ID %d" userId)
         | NotFound -> Html.h1 "Not Found"
 
-    Router.router [
-        Router.onUrlChanged (parseUrl >> PageChanged >> dispatch)
-        Router.application currentPage
+    React.router [
+        router.onUrlChanged (parseUrl >> PageChanged >> dispatch)
+        router.children currentPage
     ]
 ```
 Of course, you can define your own patterns to match against the route segments, just remember that you are working against simple string.
 
 ### Programmatic Navigation
 
-Aside from listening to manual changes made to the URL by hand, the `Router.router` element is able to listen to changes made programmatically from your code with `Router.navigate(...)`. This function is implemented as a *command* and can be used inside your `update` function.
+Aside from listening to manual changes made to the URL by hand, the `React.router` element is able to listen to changes made programmatically from your code with `Router.navigate(...)`. 
+To use this function is as a *command* inside your `update` function the same functionality is exposed as `Cmd.navigate`.
 
-The function `Router.navigate` has the general syntax:
+The function `Router.navigate` (and `Cmd.navigate`) has the general syntax:
 ```
 Router.navigate(segment1, segment2, ..., segmentN, [query string parameters], [historyMode])
 ```
@@ -157,15 +157,6 @@ Router.navigate("search", [ "q", "whats up" ]) => @"#/search?q=whats%20up"
 Router.navigate("users", HistoryMode.PushState)
 // to replace current history entry, use HistoryMode.ReplaceState
 Router.navigate("users", HistoryMode.ReplaceState)
-```
-
-### Programmatic navigation in standalone React apps
-The functions `Router.navigate` and `Router.navigatePath` return Elmish commands to be used in Elmish applications. However, if you want to use `Feliz.Router` in a standalone React application, you can simply execute the command yourself using `Router.execute` to perform the navigation:
-```fs
-Html.button [
-    prop.text "Navigate away"
-    prop.onClick (fun _ -> Router.execute(Router.navigate "users"))
-]
 ```
 
 ### Generating links
@@ -200,12 +191,12 @@ Html.a [
 ```
 
 ### Using Path routes without hash sign
-The router by default prepends all generated routes with a hash sign (`#`), to omit the hash sign and use plain old paths,  use `Router.pathMode`
+The router by default prepends all generated routes with a hash sign (`#`), to omit the hash sign and use plain old paths, use `router.pathMode`
 ```fs
-Router.router [
-    Router.pathMode
-    Router.onUrlChanged (parseUrl >> PageChanged >> dispatch)
-    Router.application currentPage
+React.router [
+    router.pathMode
+    router.onUrlChanged (parseUrl >> PageChanged >> dispatch)
+    router.children currentPage
 ]
 ```
 Then refactor the application to use path-based functions rather than the default functions which are hash-based:
@@ -214,15 +205,20 @@ Then refactor the application to use path-based functions rather than the defaul
 | `Router.currentUrl()` | `Router.currentPath()`  |
 | `Router.format()`     | `Router.formatPath()`   |
 | `Router.navigate()`   | `Router.navigatePath()` |
+| `Cmd.currentUrl()`    | `Cmd.currentPath()`     |
+| `Cmd.format()`        | `Cmd.formatPath()`      |
+| `Cmd.navigate()`      | `Cmd.navigatePath()`    |
 
-Using (anchor) `Html.a` tags using path mode can be problematic because they a full-refresh if they are not prefixed with the hash sign. Still, you can use them with path mode routing by overriding the default behavior using the `prop.onClick` event handler to dispatch a message which executes a `Router.navigatePath` command. It goes like this:
+Using (anchor) `Html.a` tags using path mode can be problematic because they cause a full-refresh if they are not prefixed with the hash sign. 
+Still, you can use them with path mode routing by overriding the default behavior using the `prop.onClick` event handler to dispatch a 
+message which executes a `Cmd.navigatePath` command. It goes like this:
 ```fs
 type Msg =
  | NavigateTo of string
 
 let update msg state =
   match msg with
-  | NavigateTo href -> state, Router.navigatePath(href)
+  | NavigateTo href -> state, Cmd.navigatePath(href)
 
 let goToUrl (dispatch: Msg -> unit) (href: string) (e: MouseEvent) =
     // disable full page refresh
@@ -256,10 +252,10 @@ let init() = { CurrentUrl = Router.currentUrl() }, Cmd.none
 let update msg state =
     match msg with
     | UrlChanged segments -> { state with CurrentUrl = segments }, Cmd.none
-    // notice here the use of the command Router.navigate
-    | NavigateToUsers -> state, Router.navigate("users")
+    // notice here the use of the command Cmd.navigate
+    | NavigateToUsers -> state, Cmd.navigate("users")
     // Router.navigate with query string parameters
-    | NavigateToUser userId -> state, Router.navigate("users", [ "id", userId ])
+    | NavigateToUser userId -> state, Cmd.navigate("users", [ "id", userId ])
 
 let render state dispatch =
 
@@ -296,8 +292,8 @@ let render state dispatch =
         | _ ->
             Html.h1 "Not found"
 
-    Router.router [
-        Router.onUrlChanged (UrlChanged >> dispatch)
-        Router.application currentPage
+    React.router [
+        router.onUrlChanged (UrlChanged >> dispatch)
+        router.children currentPage
     ]
 ```

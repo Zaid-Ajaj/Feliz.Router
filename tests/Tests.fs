@@ -5,16 +5,12 @@ open Fable.Mocha
 open Fable.SimpleJson
 
 type test =
-    static member equal a b = Expect.equal a b "They are equal"
-    static member areEqual a b = Expect.equal a b "They are equal"
     static member pass() = Expect.isTrue true "It must be true"
     static member fail() = Expect.isTrue false "It must be false"
-    static member isTrue x = Expect.isTrue x "It must be true"
-    static member unexpected (x: 't) = Expect.isTrue false (Json.stringify x)
     static member failwith x = failwith x
     static member passWith x = Expect.isTrue true
 
-let itCompiles() = Router.execute(Router.navigate "users")
+let itCompiles() = Router.navigate "users"
 
 let routerTests =
     testList "Router tests" [
@@ -61,7 +57,8 @@ let routerTests =
                 "?token=jwt", [ "?token=jwt" ]
                 "?pretty", [ "?pretty" ]
             ]
-            |> List.iter (fun (input, output) -> Expect.equal output (Router.urlSegments input RouteMode.Hash)  "Should be equal")
+            |> List.iter (fun (input, output) -> 
+                Expect.equal (Router.urlSegments input RouteMode.Hash) output (sprintf "Input of %s should output %A" input output))
 
         testCase "RouteMode affects how the URL segments are cleaned up" <| fun _ ->
             ("/some/path#", RouteMode.Hash)
@@ -101,13 +98,13 @@ let routerTests =
             | otherwise -> test.fail()
 
             match [ "users"; "?id=1" ] with
-            | [ "users"; Route.Query [ "id", Route.Int userId ] ] -> test.areEqual userId 1
+            | [ "users"; Route.Query [ "id", Route.Int userId ] ] -> Expect.equal userId 1 "They are equal"
             | otherwise -> test.fail()
 
             match [ "users"; "?id=1&limit=5" ] with
             | [ "users"; Route.Query [ "id", Route.Int userId; "limit", Route.Int limit ] ] ->
-                test.areEqual userId 1
-                test.areEqual limit 5
+                Expect.equal userId 1 "They are equal"
+                Expect.equal limit 5 "They are equal"
             | otherwise ->
                 test.fail()
 
@@ -163,7 +160,7 @@ let routerTests =
             let actual = Router.encodeQueryString input
             Expect.equal actual expected "They are equal"
 
-        testCase "encode segments worsks" <| fun _ ->
+        testCase "encode segments works" <| fun _ ->
             [
                 [ "users" ], "#/users"
                 [ "#/home" ], "#/home"
