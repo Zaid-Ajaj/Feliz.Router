@@ -205,7 +205,6 @@ Then refactor the application to use path-based functions rather than the defaul
 | `Router.currentUrl()` | `Router.currentPath()`  |
 | `Router.format()`     | `Router.formatPath()`   |
 | `Router.navigate()`   | `Router.navigatePath()` |
-| `Cmd.format()`        | `Cmd.formatPath()`      |
 | `Cmd.navigate()`      | `Cmd.navigatePath()`    |
 
 Using (anchor) `Html.a` tags using path mode can be problematic because they cause a full-refresh if they are not prefixed with the hash sign. 
