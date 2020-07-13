@@ -916,14 +916,6 @@ type Router =
 
 [<Erase>]
 type Cmd =
-    /// Parses the current URL of the page and returns the cleaned URL segments. This is default when working with hash URLs. When working with path-based URLs, use Router.currentPath() instead.
-    static member inline currentUrl (handler: string list -> 'Msg) : Cmd<'Msg> =
-        [ fun dispatch -> Router.currentUrl() |> handler |> dispatch ]
-            
-    /// Parses the current URL of the page and returns the cleaned URL segments. This is default when working with path URLs. When working with hash-based (#) URLs, use Router.currentUrl() instead.
-    static member inline currentPath (handler: string list -> 'Msg) : Cmd<'Msg> =
-        [ fun dispatch -> Router.currentPath() |> handler |> dispatch ]
-        
     static member inline navigate([<ParamArray>] xs: string array) : Cmd<'Msg> =
         [ fun _ -> Router.navigate(xs) ]
            

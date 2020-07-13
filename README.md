@@ -205,7 +205,6 @@ Then refactor the application to use path-based functions rather than the defaul
 | `Router.currentUrl()` | `Router.currentPath()`  |
 | `Router.format()`     | `Router.formatPath()`   |
 | `Router.navigate()`   | `Router.navigatePath()` |
-| `Cmd.currentUrl()`    | `Cmd.currentPath()`     |
 | `Cmd.format()`        | `Cmd.formatPath()`      |
 | `Cmd.navigate()`      | `Cmd.navigatePath()`    |
 
