@@ -1,6 +1,5 @@
 var path = require("path");
 
-
 module.exports = function (evn, argv) {
     var mode = argv.mode || "development";
     var isProduction = mode === "production";

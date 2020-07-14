@@ -105,12 +105,12 @@ let render state dispatch =
             ]
 
         | _ ->
-            Html.h1 "Not Found"
+            Html.h1 "Not Found!"
 
     React.router [
         router.hashMode
         router.onUrlChanged (UrlChanged >> dispatch)
-        
+
         router.children [
             Html.div [
                 prop.style [ style.padding 20 ]

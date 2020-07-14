@@ -19,7 +19,7 @@ let update (UrlChanged segments) state =
 let render state dispatch =
     React.router [
         router.onUrlChanged (UrlChanged >> dispatch)
-        
+
         router.children [
             match state.CurrentUrl with
             | [ ] -> Html.h1 "Home"
@@ -133,7 +133,7 @@ Of course, you can define your own patterns to match against the route segments,
 
 ### Programmatic Navigation
 
-Aside from listening to manual changes made to the URL by hand, the `React.router` element is able to listen to changes made programmatically from your code with `Router.navigate(...)`. 
+Aside from listening to manual changes made to the URL by hand, the `React.router` element is able to listen to changes made programmatically from your code with `Router.navigate(...)`.
 To use this function is as a *command* inside your `update` function the same functionality is exposed as `Cmd.navigate`.
 
 The function `Router.navigate` (and `Cmd.navigate`) has the general syntax:
@@ -207,8 +207,8 @@ Then refactor the application to use path-based functions rather than the defaul
 | `Router.navigate()`   | `Router.navigatePath()` |
 | `Cmd.navigate()`      | `Cmd.navigatePath()`    |
 
-Using (anchor) `Html.a` tags using path mode can be problematic because they cause a full-refresh if they are not prefixed with the hash sign. 
-Still, you can use them with path mode routing by overriding the default behavior using the `prop.onClick` event handler to dispatch a 
+Using (anchor) `Html.a` tags using path mode can be problematic because they cause a full-refresh if they are not prefixed with the hash sign.
+Still, you can use them with path mode routing by overriding the default behavior using the `prop.onClick` event handler to dispatch a
 message which executes a `Cmd.navigatePath` command. It goes like this:
 ```fs
 type Msg =
@@ -295,3 +295,14 @@ let render state dispatch =
         router.children currentPage
     ]
 ```
+### Migrating from 2.x to 3.x
+
+The 3.x release refactored the API to be more in line with how Feliz libraries are built as well as using latest features from React like functional components to implement the router itself. This release also made it easy to work with the router from a React-only applications and not just from Elmish based apps.
+
+To migrate your router to latest version, here are the required changes:
+  - `Router.router` becomes `React.router`
+  - `Router.onUrlChanged` becomes `router.onUrlChanged`
+  - `Router.application` becomes `router.children`
+  - `Router.navigate` becomes `Cmd.navigate` for the Elmish variant and `Router.navigate() : unit` for the React variant
+
+The rest of the implementation and API is kept as is. If you have any questions or run into problems, please let us know!
