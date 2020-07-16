@@ -208,12 +208,12 @@ type router =
     static member inline children (elements: ReactElement list) : IRouterProperty = unbox ("application", React.fragment elements)
 
     /// Use # based routes (default)
-    static member inline hashMode : IRouterProperty = unbox ("routeMode", RouteMode.Hash)
+    static member inline hashMode : IRouterProperty = unbox ("hashMode", RouteMode.Hash)
 
     /// Use full (HTML 5) based routes instead of # based.
     /// You have to be careful about which requests you want forwarded to the server and which ones should be handled locally.
     /// To keep the request local, you have to use the 'Router.navigate' function for all the URL transitions.
-    static member inline pathMode : IRouterProperty = unbox ("routeMode", RouteMode.Path)
+    static member inline pathMode : IRouterProperty = unbox ("hashMode", RouteMode.Path)
 
 [<Erase>]
 type Router =
@@ -1142,229 +1142,229 @@ type Cmd =
 
 
     static member inline navigatePath([<ParamArray>] xs: string array) =
-        [ fun _ -> Router.navigate(xs) ]
+        [ fun _ -> Router.navigatePath(xs) ]
 
     static member inline navigatePath(segment: string, queryString: (string * string) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment, queryString) ]
+        [ fun _ -> Router.navigatePath(segment, queryString) ]
 
     static member inline navigatePath(segment: string, queryString: (string * string) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment, queryString, mode) ]
 
     static member inline navigatePath(segment: string, queryString: (string * int) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment, queryString) ]
+        [ fun _ -> Router.navigatePath(segment, queryString) ]
 
     static member inline navigatePath(segment: string, queryString: (string * int) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment, queryString, mode) ]
 
     static member inline navigatePath(segment1: string, segment2: string, queryString: (string * string) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, queryString) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, queryString) ]
 
     static member inline navigatePath(segment1: string, segment2: string, queryString: (string * string) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, queryString, mode) ]
 
     static member inline navigatePath(segment1: string, segment2: string, queryString: (string * int) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, queryString) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, queryString) ]
 
     static member inline navigatePath(segment1: string, segment2: string, queryString: (string * int) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, queryString, mode) ]
 
     static member inline navigatePath(segment1: string, segment2: string, segment3:int, queryString: (string * string) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, queryString) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, queryString) ]
 
     static member inline navigatePath(segment1: string, segment2: string, segment3:int, queryString: (string * string) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2,string  segment3, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2,string  segment3, queryString, mode) ]
 
     static member inline navigatePath(segment1: string, segment2: string, segment3:int, queryString: (string * int) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, queryString) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, queryString) ]
 
     static member inline navigatePath(segment1: string, segment2: string, segment3:int, queryString: (string * int) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, queryString, mode) ]
 
     static member inline navigatePath(segment1: string, segment2: string, segment3:string, queryString: (string * string) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, queryString) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, queryString) ]
 
     static member inline navigatePath(segment1: string, segment2: string, segment3:string, queryString: (string * string) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, queryString, mode) ]
 
     static member inline navigatePath(segment1: string, segment2: string, segment3:string, queryString: (string * int) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, queryString) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, queryString) ]
 
     static member inline navigatePath(segment1: string, segment2: string, segment3:string, queryString: (string * int) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, queryString, mode) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:string, queryString: (string * string) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, queryString) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, queryString) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:string, queryString: (string * string) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, queryString, mode) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:string, queryString: (string * int) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, queryString) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, queryString) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:string, queryString: (string * int) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, queryString, mode) ]
 
     static member inline navigatePath(segment1: string, segment2: string, segment3:string, segment4: string, queryString: (string * string) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, queryString) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, queryString) ]
 
     static member inline navigatePath(segment1: string, segment2: string, segment3:string, segment4: string, queryString: (string * string) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, queryString, mode) ]
 
     static member inline navigatePath(segment1: string, segment2: string, segment3:string, segment4: string, queryString: (string * int) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, queryString) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, queryString) ]
 
     static member inline navigatePath(segment1: string, segment2: string, segment3:string, segment4: string, queryString: (string * int) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, queryString, mode) ]
 
     static member inline navigatePath(segment1: string, segment2: string, segment3:string, segment4: string, segment5, queryString: (string * string) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, segment5, queryString) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, segment5, queryString) ]
 
     static member inline navigatePath(segment1: string, segment2: string, segment3:string, segment4: string, segment5, queryString: (string * string) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, segment5, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, segment5, queryString, mode) ]
 
     static member inline navigatePath(segment1: string, segment2: string, segment3:string, segment4: string, segment5, queryString: (string * int) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, segment5, queryString) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, segment5, queryString) ]
 
     static member inline navigatePath(segment1: string, segment2: string, segment3:string, segment4: string, segment5, queryString: (string * int) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, segment5, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, segment5, queryString, mode) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:string, segment4: string, queryString: (string * string) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, queryString) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, queryString) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:string, segment4: string, queryString: (string * string) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, queryString, mode) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:string, segment4: string, queryString: (string * int) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, queryString) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, queryString) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:string, segment4: string, queryString: (string * int) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, queryString, mode) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:int, segment4: string, queryString: (string * string) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, queryString) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, queryString) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:int, segment4: string, queryString: (string * string) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, queryString, mode) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:int, segment4: string, queryString: (string * int) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, queryString) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, queryString) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:int, segment4: string, queryString: (string * int) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, queryString, mode) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:int, segment4: string, segment5: string, segment6: string, queryString: (string * string) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, segment5, segment6, queryString) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, segment5, segment6, queryString) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:int, segment4: string, segment5: string, segment6: string, queryString: (string * string) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, segment5, segment6, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, segment5, segment6, queryString, mode) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:int, segment4: string, segment5: string, segment6: string, queryString: (string * int) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, segment5, segment6, queryString) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, segment5, segment6, queryString) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:int, segment4: string, segment5: string, segment6: string, queryString: (string * int) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, segment5, segment6, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, segment5, segment6, queryString, mode) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:int, segment4: int, segment5: string, queryString: (string * string) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, segment5, queryString) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, segment5, queryString) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:int, segment4: int, segment5: string, queryString: (string * string) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, segment5, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, segment5, queryString, mode) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:int, segment4: int, segment5: string, queryString: (string * int) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, segment5, queryString) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, segment5, queryString) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:int, segment4: int, segment5: string, queryString: (string * int) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, segment5, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, segment5, queryString, mode) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:string, segment4: int, segment5: string, queryString: (string * string) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, segment5, queryString) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, segment5, queryString) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:string, segment4: int, segment5: string, queryString: (string * string) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, segment5, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, segment5, queryString, mode) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:string, segment4: int, segment5: string, queryString: (string * int) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, segment5, queryString) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, segment5, queryString) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:string, segment4: int, segment5: string, queryString: (string * int) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, segment5, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, segment5, queryString, mode) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:string, segment4: string, segment5, queryString: (string * string) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, segment5, queryString) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, segment5, queryString) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:string, segment4: string, segment5, queryString: (string * string) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, segment5, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, segment5, queryString, mode) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:string, segment4: string, segment5, queryString: (string * int) list) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, segment5, queryString) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, segment5, queryString) ]
 
     static member inline navigatePath(segment1: string, segment2: int, segment3:string, segment4: string, segment5, queryString: (string * int) list, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, segment3, segment4, segment5, queryString, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, segment3, segment4, segment5, queryString, mode) ]
 
     static member inline navigatePath(fullPath: string) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(fullPath) ]
+        [ fun _ -> Router.navigatePath(fullPath) ]
 
     static member inline navigatePath(fullPath: string, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(fullPath, mode) ]
+        [ fun _ -> Router.navigatePath(fullPath, mode) ]
 
     static member inline navigatePath(segment: string, value: int) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment, value) ]
+        [ fun _ -> Router.navigatePath(segment, value) ]
 
     static member inline navigatePath(segment: string, value: int, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment, value, mode) ]
+        [ fun _ -> Router.navigatePath(segment, value, mode) ]
 
     static member inline navigatePath(segment1: string, value1: int, value2: int) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, value1, value2) ]
+        [ fun _ -> Router.navigatePath(segment1, value1, value2) ]
 
     static member inline navigatePath(segment1: string, value1: int, value2: int, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, value1, value2, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, value1, value2, mode) ]
 
     static member inline navigatePath(segment1: string, segment2: string, value1: int) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, value1) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, value1) ]
 
     static member inline navigatePath(segment1: string, segment2: string, value1: int, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, segment2, value1, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, segment2, value1, mode) ]
 
     static member inline navigatePath(segment1: string, value1: int, segment2: string) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, value1, segment2) ]
+        [ fun _ -> Router.navigatePath(segment1, value1, segment2) ]
 
     static member inline navigatePath(segment1: string, value1: int, segment2: string, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, value1, segment2, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, value1, segment2, mode) ]
 
     static member inline navigatePath(segment1: string, value1: int, segment2: string, value2: int) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, value1, segment2, value2) ]
+        [ fun _ -> Router.navigatePath(segment1, value1, segment2, value2) ]
 
     static member inline navigatePath(segment1: string, value1: int, segment2: string, value2: int, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, value1, segment2, value2, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, value1, segment2, value2, mode) ]
 
     static member inline navigatePath(segment1: string, value1: int, segment2: string, value2: int, segment3: string) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, value1, segment2, value2, segment3) ]
+        [ fun _ -> Router.navigatePath(segment1, value1, segment2, value2, segment3) ]
 
     static member inline navigatePath(segment1: string, value1: int, segment2: string, value2: int, segment3: string, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, value1, segment2, value2, segment3, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, value1, segment2, value2, segment3, mode) ]
 
     static member inline navigatePath(segment1: string, value1: int, segment2: string, value2: int, segment3: string, segment4: string) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, value1, segment2, value2, segment3, segment4) ]
+        [ fun _ -> Router.navigatePath(segment1, value1, segment2, value2, segment3, segment4) ]
 
     static member inline navigatePath(segment1: string, value1: int, segment2: string, value2: int, segment3: string, segment4: string, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, value1, segment2, value2, segment3, segment4, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, value1, segment2, value2, segment3, segment4, mode) ]
 
     static member inline navigatePath(segment1: string, value1: int, segment2: string, value2: int, segment3: string, value3: int) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, value1, segment2, value2, segment3, value3) ]
+        [ fun _ -> Router.navigatePath(segment1, value1, segment2, value2, segment3, value3) ]
 
     static member inline navigatePath(segment1: string, value1: int, segment2: string, value2: int, segment3: string, value3: int, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, value1, segment2, value2, segment3, value3, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, value1, segment2, value2, segment3, value3, mode) ]
 
     static member inline navigatePath(segment1: string, value1: int, value2: int, value3: int) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, value1, value2, value3) ]
+        [ fun _ -> Router.navigatePath(segment1, value1, value2, value3) ]
 
     static member inline navigatePath(segment1: string, value1: int, value2: int, value3: int, mode: HistoryMode) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, value1, value2, value3, mode) ]
+        [ fun _ -> Router.navigatePath(segment1, value1, value2, value3, mode) ]
 
     static member inline navigatePath(segment1: string, value1: int, value2: int, segment2: string) : Cmd<'Msg> =
-        [ fun _ -> Router.navigate(segment1, value1, value2, segment2) ]
+        [ fun _ -> Router.navigatePath(segment1, value1, value2, segment2) ]
 
     static member inline navigatePath(segment1: string, value1: int, value2: int, segment2: string, mode: HistoryMode) : Cmd<'Msg> =
-            [ fun _ -> Router.navigate(segment1, value1, value2, segment2, mode) ]
+            [ fun _ -> Router.navigatePath(segment1, value1, value2, segment2, mode) ]
 
 module Route =
     let (|Int|_|) (input: string) =
