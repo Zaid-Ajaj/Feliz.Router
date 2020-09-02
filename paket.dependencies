@@ -7,7 +7,7 @@ group Main
     nuget Fable.SimpleJson
     nuget Feliz
     nuget Feliz.UseListener
-    nuget FSharp.Core lowest_matching: true
+    nuget FSharp.Core
     nuget Fable.Core
     nuget Fable.Elmish.React
 
