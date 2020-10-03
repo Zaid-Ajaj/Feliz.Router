@@ -1,5 +1,5 @@
 [<RequireQualifiedAccess>]
-module UtilsTests
+module SharedTests
 
 open Feliz.Router.Shared
 open Fable.Mocha
