@@ -2,7 +2,7 @@
 
 open Elmish
 open Feliz
-open Feliz.Router
+open Feliz.Router.PathRouter
 
 type State = { CurrentUrl : string list }
 
@@ -12,20 +12,20 @@ type Msg =
     | NavigateToUser of int
     | NavigateToUserReplaceState of int
 
-let init() = { CurrentUrl = Router.currentPath() }, Cmd.none
+let init() = { CurrentUrl = Router.currentUrl() }, Cmd.none
 
 let commands() = [
-    Router.navigatePath("one", "two", "three")
-    Router.navigatePath("user", 15)
-    Router.navigatePath("one", "two", [ "limit", "10"; "id", "20" ])
+    Router.navigate("one", "two", "three")
+    Router.navigate("user", 15)
+    Router.navigate("one", "two", [ "limit", "10"; "id", "20" ])
 ]
 
 let update msg state =
     match msg with
     | UrlChanged segments -> { state with CurrentUrl = segments }, Cmd.none
-    | NavigateUsers -> state, Cmd.navigatePath("users")
-    | NavigateToUser userId -> state, Cmd.navigatePath("users", [ "id", userId ])
-    | NavigateToUserReplaceState userId -> state, Cmd.navigatePath("users", [ "id", userId ], HistoryMode.ReplaceState)
+    | NavigateUsers -> state, Cmd.navigate("users")
+    | NavigateToUser userId -> state, Cmd.navigate("users", [ "id", userId ])
+    | NavigateToUserReplaceState userId -> state, Cmd.navigate("users", [ "id", userId ], HistoryMode.ReplaceState)
 
 let render state dispatch =
     let currentPage =
@@ -37,7 +37,7 @@ let render state dispatch =
                     prop.onClick (fun _ -> dispatch NavigateUsers)
                 ]
                 Html.a [
-                    prop.href (Router.formatPath("users"))
+                    prop.href (Router.format("users"))
                     prop.text "Users link"
                 ]
             ]
@@ -61,11 +61,11 @@ let render state dispatch =
 
                 Html.button [
                     prop.text "Log Router.formatPath(\"users\")"
-                    prop.onClick(fun _ -> Browser.Dom.console.log(Router.formatPath("users")))
+                    prop.onClick(fun _ -> Browser.Dom.console.log(Router.format("users")))
                 ]
 
                 Html.a [
-                    prop.href (Router.formatPath("users", ["id", 10]))
+                    prop.href (Router.format("users", ["id", 10]))
                     prop.text "Single User link"
                 ]
             ]
@@ -81,11 +81,6 @@ let render state dispatch =
                     prop.text "Log Router.currentUrl()"
                     prop.onClick(fun _ -> Browser.Dom.console.log(Router.currentUrl() |> Array.ofList))
                 ]
-
-                Html.button [
-                    prop.text "Log Router.currentPath()"
-                    prop.onClick(fun _ -> Browser.Dom.console.log(Router.currentPath() |> Array.ofList))
-                ]
             ]
 
 
@@ -97,18 +92,12 @@ let render state dispatch =
                     prop.text "Log Router.currentUrl()"
                     prop.onClick(fun _ -> Browser.Dom.console.log(Router.currentUrl() |> Array.ofList))
                 ]
-
-                Html.button [
-                    prop.text "Log Router.currentPath()"
-                    prop.onClick(fun _ -> Browser.Dom.console.log(Router.currentPath() |> Array.ofList))
-                ]
             ]
 
         | _ ->
             Html.h1 "Not Found"
 
     React.router [
-        router.pathMode
         router.onUrlChanged (UrlChanged >> dispatch)
 
         router.children [

@@ -3,8 +3,11 @@
         <TargetFramework>netstandard2.0</TargetFramework>
     </PropertyGroup>
     <ItemGroup>
-        <Compile Include="..\src\Router.fs" />
+        <Compile Include="SharedTests.fs" />
+        <Compile Include="HashRouterTests.fs" />
+        <Compile Include="PathRouterTests.fs" />
         <Compile Include="Tests.fs" />
+        <Compile Include="Main.fs" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\src\Feliz.Router.fsproj" />
