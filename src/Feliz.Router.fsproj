@@ -15,6 +15,9 @@
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="Router.fs" />
+        <Compile Include="Shared.fs" />
+        <Compile Include="HashRouter.fs" />
+        <Compile Include="PathRouter.fs" />
         <None Include="paket.references" />
     </ItemGroup>
     <ItemGroup>

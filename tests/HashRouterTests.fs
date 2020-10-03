@@ -1,9 +1,9 @@
 [<RequireQualifiedAccess>]
-module LegacyTests
+module HashRoutingTests
 
-open Feliz.Router
+open Feliz.Router.Shared
+open Feliz.Router.HashRouter
 open Fable.Mocha
-open Fable.SimpleJson
 
 type test =
     static member pass() = Expect.isTrue true "It must be true"
@@ -15,13 +15,13 @@ let itCompiles() = Router.navigate "users"
 
 let testCases =
     [
-        testCase "Route.Int works" <| fun _ ->
+        testCase "HashRouter Route.Int works" <| fun _ ->
             match [ "5"; "-1";  "" ] with
             | [ Route.Int 5; Route.Int -1; "" ] -> test.pass()
             | [ Route.Int 5; Route.Int -1; Route.Int value ] -> test.failwith (string value)
             | _ -> test.fail()
 
-        testCase "Router.urlSegments works" <| fun _ ->
+        testCase "HashRouter Router.urlSegments works" <| fun _ ->
             [
                 "", [ ]
                 "#" , [ ]
@@ -59,16 +59,31 @@ let testCases =
                 "?pretty", [ "?pretty" ]
             ]
             |> List.iter (fun (input, output) -> 
-                Expect.equal (Router.urlSegments input RouteMode.Hash) output (sprintf "Input of %s should output %A" input output))
+                Expect.equal (Internal.urlSegments input) output (sprintf "Input of %s should output %A" input output))
 
-        testCase "Router.urlSegments decodes URL segments" <| fun _ ->
+        testCase "HashRouter RouteMode affects how the URL segments are cleaned up" <| fun _ ->
+            "/some/path#"
+            |> Internal.urlSegments
+            |> fun output -> Expect.equal output [ ] "Hash at the end means route starts there"
+
+            "/Feliz.MaterialUI/#"
+            |> Internal.urlSegments
+            |> fun output -> Expect.equal output [ ] "Hash at the end means route starts there"
+
+            "/Feliz.MaterialUI#"
+            |> Internal.urlSegments
+            |> fun output -> Expect.equal output [ ] "Hash at the end means route starts there"
+
+            "/some/path#/"
+            |> Internal.urlSegments
+            |> fun output -> Expect.equal output [ ] "Hash at the end means route starts there"
+
+        testCase "HashRouter Router.urlSegments decodes URL segments" <| fun _ ->
             let hashInput = "#/Hello%20World"
-            let pathInput = "/Hello%20World"
             let expected  = [ "Hello World" ]
-            Expect.equal expected (Router.urlSegments hashInput RouteMode.Hash)  "They are equal"
-            Expect.equal expected (Router.urlSegments pathInput RouteMode.Path)  "They are equal"
+            Expect.equal expected (Internal.urlSegments hashInput)  "They are equal"
 
-        testCase "Route.Query works" <| fun _ ->
+        testCase "HashRouter Route.Query works" <| fun _ ->
             match [ "users"; "?id=1" ] with
             | [ "users"; Route.Query [ "id", "1" ] ] -> test.pass()
             | otherwise -> test.fail()
@@ -84,7 +99,7 @@ let testCases =
             | otherwise ->
                 test.fail()
 
-        testCase "Boolean query string paramters" <| fun _ ->
+        testCase "HashRouter Boolean query string paramters" <| fun _ ->
             match "?value=true" with
             | Route.Query [ "value", Route.Bool true ] -> test.pass()
             | otherwise -> test.fail()
@@ -105,7 +120,7 @@ let testCases =
             | Route.Query [ "users", "all"; "pretty", "" ]  -> test.pass()
             | otherwise -> test.fail()
 
-        testCase "Double and decimal Route" <| fun _ ->
+        testCase "HashRouter Double and decimal Route" <| fun _ ->
             match "?lng=12.12411241&lat=2.3451241" with
             | Route.Query [ "lng", Route.Decimal 12.12411241M; "lat", Route.Decimal 2.3451241M ] ->
                 test.pass()
@@ -118,54 +133,21 @@ let testCases =
             | otherwise ->
                 test.fail()
 
-        testCase "encodeQueryString for a single argument" <| fun _ ->
-            let input = [ "id", "1" ]
-            let expected = "?id=1"
-            let actual = Router.encodeQueryString input
-            Expect.equal actual expected "They are equal"
-
-        testCase "encodeQueryString for an empty map" <| fun _ ->
-            let input = [  ]
-            let expected = ""
-            let actual = Router.encodeQueryString input
-            Expect.equal actual expected "They are equal"
-
-        testCase "encodeQueryString for multiple arguments" <| fun _ ->
-            let input = [ "id", "1"; "limit", "5" ]
-            let expected = "?id=1&limit=5"
-            let actual = Router.encodeQueryString input
-            Expect.equal actual expected "They are equal"
-
-        testCase "encode segments works" <| fun _ ->
-            [
-                [ "users" ], "#/users"
-                [ "#/home" ], "#/home"
-                [ "#/hello?value=1" ], "#/hello?value=1"
-                [ "#/hello/home" ], "#/hello/home"
-                [ "#about" ], "#/about"
-                [ "users"; "home" ], "#/users/home"
-                [ "#one"; "two" ], "#/one/two"
-                [ "users"; "1" ], "#/users/1"
-                [ "users" + Router.encodeQueryString [ "id", "1" ] ], "#/users?id=1"
-                [ "search" + Router.encodeQueryString [ "q", "whats up" ] ], @"#/search?q=whats%20up"
-                [ "products" + Router.encodeQueryStringInts [ "id", 1 ] ], "#/products?id=1"
-                [ "users" + Router.encodeQueryString [ ] ], "#/users"
-            ]
-            |> List.iter (fun (input, output) -> Expect.equal (Router.encodeParts input RouteMode.Hash) output "They are equal")
-
-            [
-                [ "users" ], "/users"
-                [ "/home" ], "/home"
-                [ "/hello?value=1" ], "/hello?value=1"
-                [ "/hello/home" ], "/hello/home"
-                [ "about" ], "/about"
-                [ "users"; "home" ], "/users/home"
-                [ "/one"; "two" ], "/one/two"
-                [ "users"; "1" ], "/users/1"
-                [ "users" + Router.encodeQueryString [ "id", "1" ] ], "/users?id=1"
-                [ "search" + Router.encodeQueryString [ "q", "whats up" ] ], @"/search?q=whats%20up"
-                [ "products" + Router.encodeQueryStringInts [ "id", 1 ] ], "/products?id=1"
-                [ "users" + Router.encodeQueryString [ ] ], "/users"
-            ]
-            |> List.iter (fun (input, output) -> Expect.equal (Router.encodeParts input RouteMode.Path) output "They are equal")
+        testCase "HashRouter encode hash segments works" <| fun _ ->
+        [
+            [  ], "#/"
+            [ "users" ], "#/users"
+            [ "#/home" ], "#/home"
+            [ "#/hello?value=1" ], "#/hello?value=1"
+            [ "#/hello/home" ], "#/hello/home"
+            [ "#about" ], "#/about"
+            [ "users"; "home" ], "#/users/home"
+            [ "#one"; "two" ], "#/one/two"
+            [ "users"; "1" ], "#/users/1"
+            [ "users" + encodeQueryString [ "id", "1" ] ], "#/users?id=1"
+            [ "search" + encodeQueryString [ "q", "whats up" ] ], @"#/search?q=whats%20up"
+            [ "products" + encodeQueryStringInts [ "id", 1 ] ], "#/products?id=1"
+            [ "users" + encodeQueryString [ ] ], "#/users"
+        ]
+        |> List.iter (fun (input, output) -> Expect.equal (Internal.encodeParts input) output "They are equal")
     ]

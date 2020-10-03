@@ -2,7 +2,7 @@ module App
 
 open Elmish
 open Feliz
-open Feliz.Router
+open Feliz.Router.HashRouter
 
 type State = { CurrentUrl : string list }
 
@@ -81,11 +81,6 @@ let render state dispatch =
                     prop.text "Log Router.currentUrl()"
                     prop.onClick(fun _ -> Browser.Dom.console.log(Router.currentUrl() |> Array.ofList))
                 ]
-
-                Html.button [
-                    prop.text "Log Router.currentPath()"
-                    prop.onClick(fun _ -> Browser.Dom.console.log(Router.currentPath() |> Array.ofList))
-                ]
             ]
 
 
@@ -97,18 +92,12 @@ let render state dispatch =
                     prop.text "Log Router.currentUrl()"
                     prop.onClick(fun _ -> Browser.Dom.console.log(Router.currentUrl() |> Array.ofList))
                 ]
-
-                Html.button [
-                    prop.text "Log Router.currentPath()"
-                    prop.onClick(fun _ -> Browser.Dom.console.log(Router.currentPath() |> Array.ofList))
-                ]
             ]
 
         | _ ->
             Html.h1 "Not Found!"
 
     React.router [
-        router.hashMode
         router.onUrlChanged (UrlChanged >> dispatch)
 
         router.children [
