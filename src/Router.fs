@@ -236,9 +236,8 @@ type Router =
     static member inline format([<ParamArray>] xs: string array) =
         Router.encodeParts (List.ofArray xs) RouteMode.Hash
     
-    static member inline format([<ParamArray>] xs: string array, queryString: (string * string) list) : string =
+    static member inline format(xs: string list, queryString: (string * string) list) : string =
         xs
-        |> List.ofArray
         |> Router.trySeparateLast
         |> Option.map (fun (r, l) -> Router.encodeParts (r @ [ l + Router.encodeQueryString queryString ]) RouteMode.Hash)
         |> Option.defaultWith (fun _ -> Router.format("", queryString))
@@ -361,9 +360,8 @@ type Router =
     static member inline navigate([<ParamArray>] xs: string array) =
         Router.nav (List.ofArray xs) HistoryMode.PushState RouteMode.Hash
     
-    static member inline navigate ([<ParamArray>] xs: string array, queryString:(string * string) list) =
+    static member inline navigate (xs: string list, queryString:(string * string) list) =
         xs
-        |> List.ofArray
         |> Router.trySeparateLast
         |> Option.map (fun (r, l) -> Router.nav (r @ [ l + Router.encodeQueryString queryString ]) HistoryMode.PushState RouteMode.Hash)
         |> Option.defaultWith (fun _ -> Router.navigate("", queryString))
@@ -594,9 +592,8 @@ type Router =
     static member inline navigatePath([<ParamArray>] xs: string array) =
         Router.nav (List.ofArray xs) HistoryMode.PushState RouteMode.Path
     
-    static member inline navigatePath ([<ParamArray>] xs: string array, queryString:(string * string) list) =
+    static member inline navigatePath (xs: string list, queryString:(string * string) list) =
         xs
-        |> List.ofArray
         |> Router.trySeparateLast
         |> Option.map (fun (r, l) -> Router.nav (r @ [ l + Router.encodeQueryString queryString ]) HistoryMode.PushState RouteMode.Path)
         |> Option.defaultWith (fun _ -> Router.navigatePath("", queryString))
@@ -827,9 +824,8 @@ type Router =
     static member inline formatPath([<ParamArray>] xs: string array) =
         Router.encodeParts (List.ofArray xs) RouteMode.Path
     
-    static member inline formatPath([<ParamArray>] xs: string array, queryString: (string * string) list) : string =
+    static member inline formatPath(xs: string list, queryString: (string * string) list) : string =
         xs
-        |> List.ofArray
         |> Router.trySeparateLast
         |> Option.map (fun (r, l) -> Router.encodeParts (r @ [ l + Router.encodeQueryString queryString ]) RouteMode.Path)
         |> Option.defaultWith (fun _ -> Router.formatPath("", queryString))
@@ -953,7 +949,7 @@ type Cmd =
     static member inline navigate([<ParamArray>] xs: string array) : Cmd<'Msg> =
         [ fun _ -> Router.navigate(xs) ]
 
-    static member inline navigate([<ParamArray>] xs: string array, queryString: (string * string) list) : Cmd<'Msg> =
+    static member inline navigate(xs: string list, queryString: (string * string) list) : Cmd<'Msg> =
         [ fun _ -> Router.navigate(xs, queryString) ]
 
     static member inline navigate(segment: string, queryString: (string * string) list) : Cmd<'Msg> =
@@ -1181,7 +1177,7 @@ type Cmd =
     static member inline navigatePath([<ParamArray>] xs: string array) =
         [ fun _ -> Router.navigatePath(xs) ]
     
-    static member inline navigatePath([<ParamArray>] xs: string array, queryString: (string * string) list) =
+    static member inline navigatePath(xs: string list, queryString: (string * string) list) =
         [ fun _ -> Router.navigatePath(xs, queryString) ]
 
     static member inline navigatePath(segment: string, queryString: (string * string) list) : Cmd<'Msg> =
