@@ -93,9 +93,9 @@ module Router =
             else encodeURIComponent part)
         |> combine
         |> normalizeRoute routeMode
-    
+
     /// Safely returns tuple of list items without last one and last item
-    let internal trySeparateLast xs =
+    let trySeparateLast xs =
         match xs |> List.rev with
         | [] -> None
         | [ single ] -> Some([], single)
@@ -235,13 +235,13 @@ type Router =
 
     static member inline format([<ParamArray>] xs: string array) =
         Router.encodeParts (List.ofArray xs) RouteMode.Hash
-    
+
     static member inline format(xs: string list, queryString: (string * string) list) : string =
         xs
         |> Router.trySeparateLast
         |> Option.map (fun (r, l) -> Router.encodeParts (r @ [ l + Router.encodeQueryString queryString ]) RouteMode.Hash)
-        |> Option.defaultWith (fun _ -> Router.format("", queryString))
-        
+        |> Option.defaultWith (fun _ -> Router.encodeParts [ Router.encodeQueryString queryString ] RouteMode.Hash)
+
     static member inline format(segment: string, queryString: (string * string) list) : string =
         Router.encodeParts [ segment + Router.encodeQueryString queryString ] RouteMode.Hash
 
@@ -359,12 +359,12 @@ type Router =
 
     static member inline navigate([<ParamArray>] xs: string array) =
         Router.nav (List.ofArray xs) HistoryMode.PushState RouteMode.Hash
-    
+
     static member inline navigate (xs: string list, queryString:(string * string) list) =
         xs
         |> Router.trySeparateLast
         |> Option.map (fun (r, l) -> Router.nav (r @ [ l + Router.encodeQueryString queryString ]) HistoryMode.PushState RouteMode.Hash)
-        |> Option.defaultWith (fun _ -> Router.navigate("", queryString))
+        |> Option.defaultWith (fun _ -> Router.nav [ Router.encodeQueryString queryString ] HistoryMode.PushState RouteMode.Hash)
 
     static member inline navigate(segment: string, queryString: (string * string) list) =
         Router.nav [ segment + Router.encodeQueryString queryString ] HistoryMode.PushState RouteMode.Hash
@@ -591,12 +591,12 @@ type Router =
 
     static member inline navigatePath([<ParamArray>] xs: string array) =
         Router.nav (List.ofArray xs) HistoryMode.PushState RouteMode.Path
-    
+
     static member inline navigatePath (xs: string list, queryString:(string * string) list) =
         xs
         |> Router.trySeparateLast
         |> Option.map (fun (r, l) -> Router.nav (r @ [ l + Router.encodeQueryString queryString ]) HistoryMode.PushState RouteMode.Path)
-        |> Option.defaultWith (fun _ -> Router.navigatePath("", queryString))
+        |> Option.defaultWith (fun _ -> Router.nav [ Router.encodeQueryString queryString ] HistoryMode.PushState RouteMode.Path)
 
     static member inline navigatePath(segment: string, queryString: (string * string) list) =
         Router.nav [ segment + Router.encodeQueryString queryString ] HistoryMode.PushState RouteMode.Path
@@ -823,12 +823,12 @@ type Router =
 
     static member inline formatPath([<ParamArray>] xs: string array) =
         Router.encodeParts (List.ofArray xs) RouteMode.Path
-    
+
     static member inline formatPath(xs: string list, queryString: (string * string) list) : string =
         xs
         |> Router.trySeparateLast
         |> Option.map (fun (r, l) -> Router.encodeParts (r @ [ l + Router.encodeQueryString queryString ]) RouteMode.Path)
-        |> Option.defaultWith (fun _ -> Router.formatPath("", queryString))
+        |> Option.defaultWith (fun _ -> Router.encodeParts [ Router.encodeQueryString queryString ] RouteMode.Path)
 
     static member inline formatPath(segment: string, queryString: (string * string) list) : string =
         Router.encodeParts [ segment + Router.encodeQueryString queryString ] RouteMode.Path
@@ -1176,7 +1176,7 @@ type Cmd =
 
     static member inline navigatePath([<ParamArray>] xs: string array) =
         [ fun _ -> Router.navigatePath(xs) ]
-    
+
     static member inline navigatePath(xs: string list, queryString: (string * string) list) =
         [ fun _ -> Router.navigatePath(xs, queryString) ]
 
