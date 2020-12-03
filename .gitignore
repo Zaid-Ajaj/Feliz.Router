@@ -199,3 +199,4 @@ bundle.js.map
 .ionide
 dist
 .fable
+/.idea

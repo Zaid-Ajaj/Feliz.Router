@@ -192,6 +192,26 @@ let routerTests =
                 [ "users" + Router.encodeQueryString [ ] ], "/users"
             ]
             |> List.iter (fun (input, output) -> Expect.equal (Router.encodeParts input RouteMode.Path) output "They are equal")
+        
+        testCase "Router.formatPath overload with segment list and query works" (fun _ ->
+            [
+                [], ["foo","bar"], "/?foo=bar"
+                [ "hello" ], [], "/hello"
+                [ "hello" ], ["foo","bar"], "/hello?foo=bar"
+                [ "hello"; "friend" ], ["foo","bar"], "/hello/friend?foo=bar"
+            ]
+            |> List.iter (fun (sgs,qry,res) -> Expect.equal (Router.formatPath(sgs,qry)) res "They are equal")
+        )
+        
+        testCase "Router.format overload with segment list and query works" (fun _ ->
+            [
+                [], ["foo","bar"], "#/?foo=bar"
+                [ "hello" ], [], "#/hello"
+                [ "hello" ], ["foo","bar"], "#/hello?foo=bar"
+                [ "hello"; "friend" ], ["foo","bar"], "#/hello/friend?foo=bar"
+            ]
+            |> List.iter (fun (sgs,qry,res) -> Expect.equal (Router.format(sgs,qry)) res "They are equal")
+        )
     ]
 
 [<EntryPoint>]
