@@ -1,4 +1,5 @@
 STORAGE: NONE
+LOWEST_MATCHING: TRUE
 NUGET
   remote: https://api.nuget.org/v3/index.json
     Elmish (3.1)
@@ -21,8 +22,8 @@ NUGET
       Fable.Browser.Event (>= 1.0) - restriction: >= netstandard2.0
       Fable.Core (>= 3.0) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
-    Fable.Core (3.2)
-      FSharp.Core (>= 5.0) - restriction: >= netstandard2.0
+    Fable.Core (3.1.6)
+      FSharp.Core (>= 4.7.1) - restriction: >= netstandard2.0
     Fable.Elmish (3.1) - restriction: >= netstandard2.0
       Fable.Core (>= 3.0) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.6.2) - restriction: >= netstandard2.0
@@ -57,7 +58,7 @@ NUGET
       Fable.Core (>= 3.1.6 < 4.0)
       Feliz (>= 1.17 < 2.0)
       FSharp.Core (>= 4.7.2)
-    FSharp.Core (5.0)
+    FSharp.Core (4.7.2)
     Microsoft.NETCore.Platforms (3.1.2) - restriction: || (&& (>= net45) (< netstandard1.3) (>= netstandard1.6)) (&& (< net45) (< netstandard1.2) (>= netstandard1.6) (< win8)) (&& (< net45) (< netstandard1.3) (>= netstandard1.6) (< win8) (< wpa81)) (&& (< net45) (< netstandard1.4) (>= netstandard1.6) (< win8) (< wpa81)) (&& (< net45) (< netstandard1.5) (>= netstandard1.6) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.6) (< netstandard2.0) (< win8) (< wpa81)) (&& (>= net46) (< netstandard1.4) (>= netstandard1.6)) (&& (>= netcoreapp2.0) (< netstandard2.0)) (&& (< netstandard1.0) (>= netstandard1.6) (< portable-net45+win8)) (&& (< netstandard1.0) (>= netstandard1.6) (>= win8)) (&& (< netstandard1.0) (>= netstandard1.6) (< win8)) (&& (< netstandard1.3) (>= netstandard1.6) (< win8) (>= wpa81)) (&& (< netstandard1.5) (>= netstandard1.6) (>= uap10.0)) (&& (>= netstandard1.6) (< portable-net45+win8+wpa81)) (&& (>= netstandard1.6) (>= uap10.1)) (&& (>= netstandard1.6) (>= wp8))
     Microsoft.NETCore.Targets (3.1) - restriction: || (&& (< monoandroid) (< monotouch) (< net45) (>= netstandard1.6) (< netstandard2.0) (< win8) (< wpa81) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net45) (< netstandard1.2) (>= netstandard1.6) (< win8)) (&& (< monoandroid) (< net45) (< netstandard1.3) (>= netstandard1.6) (< win8) (< wpa81)) (&& (< monoandroid) (< net45) (< netstandard1.4) (>= netstandard1.6) (< win8) (< wpa81)) (&& (< monoandroid) (< net45) (< netstandard1.5) (>= netstandard1.6) (< win8) (< wpa81)) (&& (< monoandroid) (< netstandard1.1) (>= netstandard1.6) (< win8)) (&& (< netstandard1.1) (>= netstandard1.6) (>= uap10.0) (< win8)) (&& (< netstandard1.3) (>= netstandard1.6) (>= uap10.0) (< win8) (< wpa81)) (&& (< netstandard1.5) (>= netstandard1.6) (>= uap10.0) (< win8) (< wpa81)) (&& (>= netstandard1.6) (< portable-net45+win8+wpa81))
     Microsoft.Win32.Primitives (4.3) - restriction: || (&& (< net45) (< netstandard1.4) (>= netstandard1.6) (< win8) (< wpa81)) (&& (< net45) (< netstandard1.5) (>= netstandard1.6) (< win8) (< wpa81)) (&& (< net45) (>= netstandard1.6) (< netstandard2.0) (< win8) (< wpa81)) (&& (>= net46) (< netstandard1.4) (>= netstandard1.6)) (&& (< netstandard1.5) (>= netstandard1.6) (>= uap10.0))

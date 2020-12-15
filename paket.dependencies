@@ -1,13 +1,13 @@
 group Main
     source https://api.nuget.org/v3/index.json
     storage:none
-
+    lowest_matching: true
     nuget Elmish
     nuget Fable.Mocha
     nuget Fable.SimpleJson
     nuget Feliz
     nuget Feliz.UseListener
-    nuget FSharp.Core
+    nuget FSharp.Core ~> 4.7.2
     nuget Fable.Core
     nuget Fable.Elmish.React
 
