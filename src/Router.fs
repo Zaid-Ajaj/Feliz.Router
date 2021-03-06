@@ -9,7 +9,7 @@ open Feliz
 open Feliz.UseListener
 open System
 
-type IUrlSearchParamters =
+type IUrlSearchParameters =
     abstract entries : unit -> seq<string array>
 
 /// Determines whether the router will push a new entry to the history of modify the current one.
@@ -141,7 +141,7 @@ module Router =
                     | _ -> [])
 
     [<Emit("new URLSearchParams($0)")>]
-    let createUrlSearchParams (queryString: string) : IUrlSearchParamters = jsNative
+    let createUrlSearchParams (queryString: string) : IUrlSearchParameters = jsNative
 
     [<Emit("window.navigator.userAgent")>]
     let navigatorUserAgent : string = jsNative

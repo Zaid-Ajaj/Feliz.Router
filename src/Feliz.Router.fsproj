@@ -8,17 +8,17 @@
         </PackageIconUrl>
         <PackageTags>fsharp;fable;react;html;router;routing</PackageTags>
         <Authors>Zaid Ajaj</Authors>
-        <Version>3.5.0</Version>
+        <Version>3.7.0</Version>
         <TargetFramework>netstandard2.0</TargetFramework>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <PackageReleaseNotes>Relax FSharp.Core dependency</PackageReleaseNotes>
+        <PackageReleaseNotes>Fix typo in the URLSearchParameter type</PackageReleaseNotes>
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="Router.fs" />
         <None Include="paket.references" />
     </ItemGroup>
     <ItemGroup>
-        <Content Include="*.fsproj; *.fs;" PackagePath="fable\" />
+        <Content Include="*.fsproj; *.fs;" Exclude="**\*.fs.js" PackagePath="fable\" />
     </ItemGroup>
     <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>
