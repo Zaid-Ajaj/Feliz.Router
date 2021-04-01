@@ -1,15 +1,17 @@
 # Feliz.Router [![Nuget](https://img.shields.io/nuget/v/Feliz.Router.svg?maxAge=0&colorB=brightgreen)](https://www.nuget.org/packages/Feliz.Router) [![Build status](https://ci.appveyor.com/api/projects/status/qwjte2b9vn43j9ff?svg=true)](https://ci.appveyor.com/project/Zaid-Ajaj/feliz-router)
 
-An Elmish router that is focused, powerful yet extremely easy to use.
+An React/Elmish router that is focused, powerful yet extremely easy to use.
 
-Here is a full example
+Here is a full example in [Feliz](https://github.com/Zaid-Ajaj/Feliz)
 
 ```fs
+module App
+
 open Feliz
 open Feliz.Router
 
 [<ReactComponent>]
-static member Router() =
+let Router() =
     let (currentUrl, updateUrl) = React.useState(Router.currentUrl())
     React.router [
         router.onUrlChanged updateUrl
@@ -25,6 +27,36 @@ static member Router() =
 open Browser.Dom
 
 ReactDOM.render(Router(), document.getElementById "root")
+```
+
+Full Elmish example
+```fs
+module App
+
+open Feliz
+open Feliz.Router
+
+type State = { CurrentUrl : string list }
+type Msg = UrlChanged of string list
+
+let init() = { CurrentUrl = Router.currentUrl() }
+let update (UrlChanged segments) state = { state with CurrentUrl = segments }
+
+let render state dispatch =
+    React.router [
+        router.onUrlChanged (UrlChanged >> dispatch)
+        router.children [
+            match state.CurrentUrl with
+            | [ ] -> Html.h1 "Home"
+            | [ "users" ] -> Html.h1 "Users page"
+            | [ "users"; Route.Int userId ] -> Html.h1 (sprintf "User ID %d" userId)
+            | _ -> Html.h1 "Not found"
+        ]
+    ]
+
+Program.mkSimple init update render
+|> Program.withReactSynchronous "root"
+|> Program.run
 ```
 
 ### Installation
