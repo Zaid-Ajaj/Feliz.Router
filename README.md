@@ -8,30 +8,23 @@ Here is a full example
 open Feliz
 open Feliz.Router
 
-type State = { CurrentUrl : string list }
-type Msg = UrlChanged of string list
-
-let init() = { CurrentUrl = Router.currentUrl() }
-
-let update (UrlChanged segments) state =
-    { state with CurrentUrl = segments }
-
-let render state dispatch =
+[<ReactComponent>]
+static member Router() =
+    let (currentUrl, updateUrl) = React.useState(Router.currentUrl())
     React.router [
-        router.onUrlChanged (UrlChanged >> dispatch)
-
+        router.onUrlChanged updateUrl
         router.children [
-            match state.CurrentUrl with
-            | [ ] -> Html.h1 "Home"
+            match currentUrl with
+            | [ ] -> Html.h1 "Index"
             | [ "users" ] -> Html.h1 "Users page"
             | [ "users"; Route.Int userId ] -> Html.h1 (sprintf "User ID %d" userId)
-            | _ -> Html.h1 "Not found"
+            | otherwise -> Html.h1 "Not found"
         ]
     ]
 
-Program.mkSimple init update render
-|> Program.withReactSynchronous "root"
-|> Program.run
+open Browser.Dom
+
+ReactDOM.render(Router(), document.getElementById "root")
 ```
 
 ### Installation
@@ -40,15 +33,14 @@ Program.mkSimple init update render
 dotnet add package Feliz.Router
 ```
 
-The package includes a single element called `router` that is to be included at the very top level of your `render` or `view` function
+The package includes a single React component called `router` that you can use at the very top level of your application
 ```fs
-let render state dispatch =
-    React.router [
-        router.onUrlChanged (UrlChanged >> dispatch)
-        router.children [
-            Html.h1 "App"
-        ]
+React.router [
+    router.onUrlChanged (UrlChanged >> dispatch)
+    router.children [
+        Html.h1 "App"
     ]
+]
 ```
 Where it has two primary properties
  - `router.onUrlChanged : string list -> unit` gets triggered when the url changes where it gives you the *url segments* to work with.
@@ -56,19 +48,17 @@ Where it has two primary properties
  - `router.children: ReactElement list` overload to be rendered as the children of the `router`
 
 ```fs
-let render state dispatch =
+let currentPage = Html.h1 "App"
 
-    let currentPage = Html.h1 "App"
-
-    React.router [
-        router.onUrlChanged (UrlChanged >> dispatch)
-        router.children [
-            Html.div [
-                Html.h1 "Using the router"
-                currentPage
-            ]
+React.router [
+    router.onUrlChanged (UrlChanged >> dispatch)
+    router.children [
+        Html.div [
+            Html.h1 "Using the router"
+            currentPage
         ]
     ]
+]
 ```
 ### `router.onUrlChanged` is everything
 
@@ -96,13 +86,6 @@ type Page =
     | User of id:int
     | NotFound
 
-type State = { CurrentPage : Page }
-
-type Msg = PageChanged of Page
-
-let update (PageChanged nextPage) state =
-    { state with CurrentPage = nextPage }
-
 // string list -> Page
 let parseUrl = function
     // matches #/ or #
@@ -116,16 +99,18 @@ let parseUrl = function
     // matches everything else
     | _ -> NotFound
 
-let render state dispatch =
+[<ReactComponent>]
+static member Router() =
+    let (pageUrl, updateUrl) = React.useState(parseUrl(Router.currentUrl()))
     let currentPage =
-        match state.CurrentPage with
+        match pageUrl with
         | Home -> Html.h1 "Home"
         | Users -> Html.h1 "Users page"
         | User userId -> Html.h1 (sprintf "User ID %d" userId)
         | NotFound -> Html.h1 "Not Found"
 
     React.router [
-        router.onUrlChanged (parseUrl >> PageChanged >> dispatch)
+        router.onUrlChanged (parseUrl >> updateUrl)
         router.children currentPage
     ]
 ```
