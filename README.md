@@ -1,6 +1,6 @@
 # Feliz.Router [![Nuget](https://img.shields.io/nuget/v/Feliz.Router.svg?maxAge=0&colorB=brightgreen)](https://www.nuget.org/packages/Feliz.Router) [![Build status](https://ci.appveyor.com/api/projects/status/qwjte2b9vn43j9ff?svg=true)](https://ci.appveyor.com/project/Zaid-Ajaj/feliz-router)
 
-An React/Elmish router that is focused, powerful yet extremely easy to use.
+A router component for React and Elmish that is focused, powerful and extremely easy to use.
 
 Here is a full example in [Feliz](https://github.com/Zaid-Ajaj/Feliz)
 
