@@ -185,6 +185,7 @@ module Router =
                 e.preventDefault()
                 
                 let onClick = Option.defaultValue ignore props.onClick
+                onClick(e)
 
                 nav [ href ] HistoryMode.PushState RouteMode.Path
             let anchorProps = (Option.defaultValue [] props.anchorProps)
