@@ -36,9 +36,11 @@ let render state dispatch =
                     prop.text "Users"
                     prop.onClick (fun _ -> dispatch NavigateUsers)
                 ]
-                Html.a [
-                    prop.href (Router.formatPath("users"))
-                    prop.text "Users link"
+                Router.link [
+                    link.href (Router.formatPath "users")
+                    link.anchorProps [
+                        prop.text "Users link"
+                    ]
                 ]
             ]
 
