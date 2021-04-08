@@ -51,6 +51,11 @@ module Router =
         abstract application: ReactElement option
         abstract hashMode: RouteMode option
 
+    type LinkProps =
+        abstract href: string option
+        abstract onClick: (MouseEvent -> unit) option
+        abstract anchorProps: (IReactProperty list) option
+
     [<Emit("encodeURIComponent($0)")>]
     let encodeURIComponent (value: string) : string = jsNative
     [<Emit("decodeURIComponent($0)")>]
@@ -169,6 +174,29 @@ module Router =
         match input.application with
         | Some elem -> elem
         | None -> Html.none)
+
+
+    /// Defines a property for the `link` element
+    type ILinkProperty = interface end
+
+    let link (props: ILinkProperty list) = unbox<LinkProps> (createObj !!props) |> React.functionComponent("Link", fun (props: LinkProps) ->
+            let href = Option.defaultValue "" props.href
+            let handleClick (e: MouseEvent) =
+                e.preventDefault()
+                
+                let onClick = Option.defaultValue ignore props.onClick
+                onClick(e)
+
+                nav [ href ] HistoryMode.PushState RouteMode.Path
+            let anchorProps = (Option.defaultValue [] props.anchorProps)
+
+            Html.a (anchorProps @ [prop.href href; prop.onClick handleClick;]))
+
+[<Erase>]
+type link =
+    static member inline href (value: string) : Router.ILinkProperty = unbox("href", value)
+    static member inline onClick (handler: MouseEvent -> unit) : Router.ILinkProperty = unbox("onClick", handler)
+    static member inline anchorProps (props: IReactProperty list) : Router.ILinkProperty = unbox("anchorProps", props)
 
 /// Defines a property for the `router` element
 type IRouterProperty = interface end
