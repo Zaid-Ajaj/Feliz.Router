@@ -133,7 +133,7 @@ let parseUrl = function
 
 [<ReactComponent>]
 static member Router() =
-    let (pageUrl, updateUrl) = React.useState(parseUrl(Router.currentUrl()))
+    let (pageUrl, updateUrl) = React.useState(Router.currentUrl >> parseUrl)
     let currentPage =
         match pageUrl with
         | Home -> Html.h1 "Home"
