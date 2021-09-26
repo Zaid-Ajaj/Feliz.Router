@@ -12,7 +12,7 @@ open Feliz.Router
 
 [<ReactComponent>]
 let Router() =
-    let (currentUrl, updateUrl) = React.useState(Router.currentUrl())
+    let (currentUrl, updateUrl) = React.useState(Router.currentUrl)
     React.router [
         router.onUrlChanged updateUrl
         router.children [
@@ -133,7 +133,7 @@ let parseUrl = function
 
 [<ReactComponent>]
 static member Router() =
-    let (pageUrl, updateUrl) = React.useState(parseUrl(Router.currentUrl()))
+    let (pageUrl, updateUrl) = React.useState(parseUrl(Router.currentUrl))
     let currentPage =
         match pageUrl with
         | Home -> Html.h1 "Home"
