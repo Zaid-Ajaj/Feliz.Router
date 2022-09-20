@@ -2,14 +2,14 @@ group Main
     source https://api.nuget.org/v3/index.json
     storage:none
     lowest_matching: true
-    nuget Elmish
-    nuget Fable.Mocha
-    nuget Fable.SimpleJson
-    nuget Feliz
+    nuget Elmish >= 4.0.0-beta-5 prerelease
+    nuget Fable.Mocha >= 2.15
+    nuget Fable.SimpleJson ~> 3
+    nuget Feliz >= 2.0.0-prerelease-003 prerelease
     nuget Feliz.UseListener
-    nuget FSharp.Core ~> 4.7.2
+    nuget FSharp.Core
     nuget Fable.Core
-    nuget Fable.Elmish.React
+    nuget Fable.Elmish.React >= 4.0.0-beta-3 prerelease
 
 group Analyzers
 source https://www.nuget.org/api/v2
