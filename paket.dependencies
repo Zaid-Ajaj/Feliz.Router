@@ -9,7 +9,7 @@ group Main
     nuget Feliz.UseListener
     nuget FSharp.Core
     nuget Fable.Core
-    nuget Fable.Elmish.React >= 4.0.0-beta-3 prerelease
+    nuget Fable.Elmish.React >= 4.0.0-beta-4 prerelease
 
 group Analyzers
 source https://www.nuget.org/api/v2
