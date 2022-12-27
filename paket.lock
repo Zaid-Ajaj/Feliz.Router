@@ -5,7 +5,7 @@ NUGET
     Elmish (3.1)
       FSharp.Core (>= 4.6.2) - restriction: || (>= net461) (>= netstandard1.6)
       NETStandard.Library (>= 1.6.1) - restriction: && (< net461) (>= netstandard1.6) (< netstandard2.0)
-    Fable.AST (3.0) - restriction: >= netstandard2.0
+    Fable.AST (4.2.1) - restriction: >= netstandard2.0
     Fable.Browser.Blob (1.1) - restriction: >= netstandard2.0
       Fable.Core (>= 3.0) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.6.2) - restriction: >= netstandard2.0
@@ -38,21 +38,21 @@ NUGET
     Fable.Parsimmon (4.1) - restriction: >= netstandard2.0
       Fable.Core (>= 3.0) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.6.2) - restriction: >= netstandard2.0
-    Fable.React (7.0.1) - restriction: >= netstandard2.0
+    Fable.React (7.4) - restriction: >= netstandard2.0
       Fable.Browser.Dom (>= 2.0.1) - restriction: >= netstandard2.0
       Fable.Core (>= 3.1.5) - restriction: >= netstandard2.0
-      FSharp.Core (>= 4.7.1) - restriction: >= netstandard2.0
+      FSharp.Core (>= 4.7.2) - restriction: >= netstandard2.0
     Fable.SimpleJson (3.11)
       Fable.Core (>= 3.1.5) - restriction: >= netstandard2.0
       Fable.Parsimmon (>= 4.0) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.7) - restriction: >= netstandard2.0
-    Feliz (1.28)
+    Feliz (1.68)
       Fable.Core (>= 3.1.5) - restriction: >= netstandard2.0
-      Fable.React (>= 7.0.1) - restriction: >= netstandard2.0
-      Feliz.CompilerPlugins (>= 1.2) - restriction: >= netstandard2.0
+      Fable.React (>= 7.4) - restriction: >= netstandard2.0
+      Feliz.CompilerPlugins (>= 1.10) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.7.2) - restriction: >= netstandard2.0
-    Feliz.CompilerPlugins (1.2) - restriction: >= netstandard2.0
-      Fable.AST (>= 3.0) - restriction: >= netstandard2.0
+    Feliz.CompilerPlugins (2.0) - restriction: >= netstandard2.0
+      Fable.AST (>= 4.2.1) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.7.2) - restriction: >= netstandard2.0
     Feliz.UseListener (0.6.3)
       Fable.Core (>= 3.1.6 < 4.0)

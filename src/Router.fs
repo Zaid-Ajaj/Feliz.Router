@@ -166,6 +166,12 @@ module Router =
 
         React.useWindowListener.on(customNavigationEvent, onChange)
 
+        React.useEffectOnce(fun () -> 
+            let ev = document.createEvent("CustomEvent")
+            ev.initEvent (customNavigationEvent, true, true)
+            window.dispatchEvent ev |> ignore
+        )
+
         match input.application with
         | Some elem -> elem
         | None -> Html.none)

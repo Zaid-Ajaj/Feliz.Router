@@ -200,3 +200,4 @@ bundle.js.map
 dist
 .fable
 /.idea
+*.fs.js
