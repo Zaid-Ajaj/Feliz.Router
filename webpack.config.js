@@ -8,23 +8,15 @@ module.exports = function (evn, argv) {
     return {
         mode: mode,
         devtool: isProduction ? false : "eval-source-map",
-        entry: './demo/App.fsproj',
+        entry: './demo/Main.fs.js',
         output: {
             filename: 'bundle.js',
             path: path.join(__dirname, './public'),
         },
         devServer: {
-            contentBase: './public',
+            static: './public',
             port: 8080,
             historyApiFallback: true
-        },
-        module: {
-            rules: [
-                {
-                    test: /\.fs(x|proj)?$/,
-                    use: "fable-loader"
-                }
-            ]
         }
     };
 }

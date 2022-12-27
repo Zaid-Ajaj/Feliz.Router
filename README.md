@@ -330,3 +330,18 @@ The rest of the implementation and API is kept as is. If you have any questions 
 Starting from Feliz.Router v4, it will only work with Fable compiler v4+ and Feliz 2.x+
 
 If you are using Fable compiler v3, then you should use Feliz.Router v3.10 (latest) which still relies on Feliz v1.68 for Fable v3 compatibility.
+
+### Development
+
+```bash
+# start by installing dependencies
+npm install
+# run tests
+npm test
+
+# run the demo application in watch mode
+npm run start:demo
+
+# build the demo application
+npm run build:demo
+```

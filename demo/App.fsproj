@@ -3,14 +3,18 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\src\Feliz.Router.fsproj" />
-  </ItemGroup>
+
   <ItemGroup>
     <Compile Include="AppPath.fs" />
     <Compile Include="App.fs" />
     <Compile Include="Main.fs" />
-    <None Include="paket.references" />
   </ItemGroup>
-  <Import Project="..\.paket\Paket.Restore.targets" />
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\Feliz.Router.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Fable.Elmish.React" Version="4.0.0" />
+  </ItemGroup>
 </Project>
