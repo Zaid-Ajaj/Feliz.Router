@@ -6,7 +6,6 @@ group Main
     nuget Fable.Mocha
     nuget Fable.SimpleJson
     nuget Feliz 1.68
-    nuget Feliz.UseListener
     nuget FSharp.Core ~> 4.7.2
     nuget Fable.Core 3.1.6
     nuget Fable.Elmish.React 3.0.1

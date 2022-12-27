@@ -6,7 +6,6 @@ open Elmish
 open Fable.Core
 open Fable.Core.JsInterop
 open Feliz
-open Feliz.UseListener
 open System
 
 type IUrlSearchParameters =
@@ -55,7 +54,6 @@ module Router =
     let encodeURIComponent (value: string) : string = jsNative
     [<Emit("decodeURIComponent($0)")>]
     let decodeURIComponent (value: string) : string = jsNative
-
     let encodeQueryString queryStringPairs =
         queryStringPairs
         |> List.map (fun (key, value) ->
@@ -157,15 +155,28 @@ module Router =
         let onChange = React.useCallbackRef(fun (ev: Event) ->
             let urlChanged = Option.defaultValue ignore input.onUrlChanged
             let routeMode = Option.defaultValue RouteMode.Hash input.hashMode
-
             onUrlChange routeMode urlChanged ev)
+        
+        // subscribe to navigation events
+        React.useEffectOnce(fun () -> 
+            if navigatorUserAgent.Contains "Trident" || navigatorUserAgent.Contains "MSIE" then
+                window.addEventListener("hashchange", onChange)
+            else 
+                window.addEventListener("popstate", onChange)
+            
+            window.addEventListener(customNavigationEvent, onChange)
 
-        if navigatorUserAgent.Contains "Trident" || navigatorUserAgent.Contains "MSIE"
-        then React.useWindowListener.onHashChange(onChange)
-        else React.useWindowListener.onPopState(onChange)
+            React.createDisposable(fun () ->
+                if navigatorUserAgent.Contains "Trident" || navigatorUserAgent.Contains "MSIE" then
+                    window.removeEventListener("hashchange", onChange)
+                else 
+                    window.removeEventListener("popstate", onChange)
 
-        React.useWindowListener.on(customNavigationEvent, onChange)
-
+                window.removeEventListener(customNavigationEvent, onChange)
+            )
+        )
+        
+        // trigger navigation event on mount
         React.useEffectOnce(fun () -> 
             let ev = document.createEvent("CustomEvent")
             ev.initEvent (customNavigationEvent, true, true)
