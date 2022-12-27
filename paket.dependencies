@@ -5,10 +5,9 @@ group Main
     nuget Elmish
     nuget Fable.Mocha
     nuget Fable.SimpleJson
-    nuget Feliz 1.68
+    nuget Feliz 2.3.0
     nuget FSharp.Core ~> 4.7.2
-    nuget Fable.Core 3.1.6
-    nuget Fable.Elmish.React 3.0.1
+    nuget Fable.Elmish.React 4.0.0
 
 group Analyzers
 source https://www.nuget.org/api/v2

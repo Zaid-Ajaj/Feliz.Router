@@ -26,7 +26,8 @@ let Router() =
 
 open Browser.Dom
 
-ReactDOM.render(Router(), document.getElementById "root")
+let root = ReactDOM.createRoot(document.getElementById "root")
+root.render(Router())
 ```
 
 Full Elmish example
@@ -323,3 +324,9 @@ To migrate your router to latest version, here are the required changes:
   - `Router.navigate` becomes `Cmd.navigate` for the Elmish variant and `Router.navigate() : unit` for the React variant
 
 The rest of the implementation and API is kept as is. If you have any questions or run into problems, please let us know!
+
+### Migrating to v4
+
+Starting from Feliz.Router v4, it will only work with Fable compiler v4+ and Feliz 2.x+
+
+If you are using Fable compiler v3, then you should use Feliz.Router v3.10 (latest) which still relies on Feliz v1.68 for Fable v3 compatibility.
